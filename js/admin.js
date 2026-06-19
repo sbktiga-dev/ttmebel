@@ -16,11 +16,27 @@ let currentMultiImages = [];
 let inlineUploadTarget = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (!checkAdminAuth()) return;
   loadProducts();
   loadSiteData();
   renderStats();
   setupDragDrop();
 });
+
+function checkAdminAuth() {
+  const isAdmin = localStorage.getItem('ttmebel_admin') === 'true';
+  if (!isAdmin) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  return true;
+}
+
+function logoutAdmin() {
+  localStorage.removeItem('ttmebel_admin');
+  localStorage.removeItem('ttmebel_auth');
+  window.location.href = 'index.html';
+}
 
 // ========== PRODUCTS ==========
 

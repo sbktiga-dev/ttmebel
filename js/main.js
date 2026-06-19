@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTooltips();
   initSeamlessBg();
   initPageTransitions();
+  initAdminVisibility();
 });
 
 function initSeamlessBg() {
@@ -291,6 +292,23 @@ function initPageTransitions() {
           }, 300);
         });
       });
+    }
+  });
+}
+
+function initAdminVisibility() {
+  const isAdmin = localStorage.getItem('ttmebel_admin') === 'true';
+  const adminBtns = document.querySelectorAll('.btn-admin');
+  
+  adminBtns.forEach(btn => {
+    if (isAdmin) {
+      btn.textContent = 'Админ';
+      btn.href = 'admin.html';
+      btn.classList.add('admin-active');
+    } else {
+      btn.textContent = 'Вход';
+      btn.href = 'login.html';
+      btn.classList.remove('admin-active');
     }
   });
 }
