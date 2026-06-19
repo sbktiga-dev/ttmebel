@@ -117,7 +117,12 @@ function openProductModal(id) {
         </div>
         <div class="pm-info">
           <div class="pm-category">${catLabel}</div>
-          ${badgeHtml}
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            ${badgeHtml}
+            <button class="fav-btn" onclick="toggleFavorite(${p.id})" id="favBtn_${p.id}" title="В избранное">
+              <i class="fa-${isFavorite(p.id) ? 'solid' : 'regular'} fa-heart"></i>
+            </button>
+          </div>
           <h2 class="pm-title">${p.name}</h2>
           <div class="pm-price">${p.price} <small>${p.priceUnit || ''}</small></div>
           <div class="pm-description">
@@ -275,4 +280,43 @@ function lightboxKeyHandler(e) {
   if (e.key === 'Escape') closeLightbox();
   if (e.key === 'ArrowLeft') navigateLightbox(-1);
   if (e.key === 'ArrowRight') navigateLightbox(1);
+}
+
+// ========== FAVORITES ==========
+
+function getFavorites() {
+  const user = JSON.parse(localStorage.getItem('ttmebel_current_user'));
+  if (!user) return [];
+  return JSON.parse(localStorage.getItem('ttmebel_favorites_' + user.id) || '[]');
+}
+
+function isFavorite(id) {
+  return getFavorites().includes(id);
+}
+
+function toggleFavorite(id) {
+  const user = JSON.parse(localStorage.getItem('ttmebel_current_user'));
+  if (!user) {
+    showToast('Войдите, чтобы добавлять в избранное');
+    return;
+  }
+
+  const key = 'ttmebel_favorites_' + user.id;
+  let favs = JSON.parse(localStorage.getItem(key) || '[]');
+
+  if (favs.includes(id)) {
+    favs = favs.filter(f => f !== id);
+    showToast('Удалено из избранного');
+  } else {
+    favs.push(id);
+    showToast('Добавлено в избранное ❤️');
+  }
+
+  localStorage.setItem(key, JSON.stringify(favs));
+
+  const btn = document.getElementById('favBtn_' + id);
+  if (btn) {
+    const icon = btn.querySelector('i');
+    icon.className = favs.includes(id) ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+  }
 }

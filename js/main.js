@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSeamlessBg();
   initPageTransitions();
   initAdminVisibility();
+  initUserHeader();
 });
 
 function initSeamlessBg() {
@@ -311,4 +312,27 @@ function initAdminVisibility() {
       btn.classList.remove('admin-active');
     }
   });
+}
+
+function initUserHeader() {
+  const user = JSON.parse(localStorage.getItem('ttmebel_current_user'));
+  const headerRight = document.querySelector('.header-right');
+  if (!headerRight) return;
+
+  let userBtn = headerRight.querySelector('.header-user-btn');
+  if (!userBtn) {
+    userBtn = document.createElement('a');
+    userBtn.className = 'header-user-btn';
+    headerRight.insertBefore(userBtn, headerRight.firstChild);
+  }
+
+  if (user) {
+    userBtn.href = 'profile.html';
+    userBtn.innerHTML = `<i class="fa-solid fa-user" style="margin-right:6px;"></i>${user.name.split(' ')[0]}`;
+    userBtn.style.cssText = 'padding:6px 14px;font-size:0.85rem;border-radius:8px;background:rgba(139,111,175,0.15);color:var(--accent);border:1px solid rgba(139,111,175,0.3);text-decoration:none;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;white-space:nowrap;';
+  } else {
+    userBtn.href = 'register.html';
+    userBtn.innerHTML = `<i class="fa-solid fa-user-plus" style="margin-right:6px;"></i>Войти`;
+    userBtn.style.cssText = 'padding:6px 14px;font-size:0.85rem;border-radius:8px;background:transparent;color:var(--text-light);border:1px solid var(--border);text-decoration:none;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;white-space:nowrap;';
+  }
 }
