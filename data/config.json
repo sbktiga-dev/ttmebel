@@ -1,0 +1,23 @@
+{
+  "telegram": {
+    "enabled": true,
+    "botToken": "ВСТАВЬ_СЮДА_ТОКЕН_БОТА",
+    "chatId": "ВСТАВЬ_СЮДА_CHAT_ID",
+    "botName": "TTmebelBot"
+  },
+  "emailjs": {
+    "enabled": false,
+    "serviceId": "",
+    "templateId": "",
+    "publicKey": ""
+  },
+  "whatsapp": {
+    "enabled": true,
+    "phone": "79991234567"
+  },
+  "notifications": {
+    "telegramEnabled": true,
+    "whatsappLink": true,
+    "saveToStorage": true
+  }
+}
