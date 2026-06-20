@@ -60,6 +60,7 @@ body::before {
 
 [data-page="home"] {
   background-color: #12111a;
+  overflow-x: hidden;
   background-image:
     radial-gradient(ellipse at 20% 50%, rgba(139,111,175,0.08) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(139,111,175,0.06) 0%, transparent 40%),
@@ -1541,6 +1542,7 @@ img {
 @media (max-width: 768px) {
   html, body {
     overflow-x: hidden;
+    max-width: 100vw;
   }
 
   .nav {
@@ -2902,7 +2904,8 @@ img {
 
 @media (max-width: 768px) {
   .gallery-strip {
-    margin: 0 50px;
+    margin: 0 36px;
+    max-width: calc(100vw - 72px);
   }
 
   .gallery-item {
