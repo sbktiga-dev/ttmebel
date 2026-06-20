@@ -798,7 +798,8 @@ img {
 }
 
 .about-image {
-  height: 400px;
+  min-height: 300px;
+  max-height: 500px;
   background: rgba(37,37,37,0.3);
   backdrop-filter: blur(4px);
   border-radius: var(--radius-lg);
@@ -808,6 +809,15 @@ img {
   color: var(--accent);
   font-size: 5rem;
   border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
 }
 
 .about-text h2 {
@@ -1526,7 +1536,8 @@ img {
   }
 
   .about-image {
-    height: 300px;
+    min-height: 200px;
+    max-height: 350px;
   }
 
   .reviews-grid {
