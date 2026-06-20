@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ttmebel-v1';
+const CACHE_NAME = 'ttmebel-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
