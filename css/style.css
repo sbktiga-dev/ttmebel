@@ -1607,12 +1607,15 @@ img {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
+    max-width: 320px;
+    margin: 0 auto;
   }
 
   .hero-buttons .btn {
     justify-content: center;
     min-height: 48px;
     font-size: 0.95rem;
+    width: 100%;
   }
 
   .advantages-grid,
@@ -1777,10 +1780,10 @@ img {
   }
 
   .callback-btn {
-    bottom: 150px;
-    right: 16px;
-    width: 50px;
-    height: 50px;
+    bottom: 200px;
+    right: 12px;
+    width: 48px;
+    height: 48px;
     font-size: 1.2rem;
   }
 
@@ -2912,11 +2915,11 @@ img {
 /* FLOATING MESSENGERS */
 .messengers-float {
   position: fixed;
-  bottom: 90px;
-  right: 24px;
+  bottom: 140px;
+  right: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   z-index: 95;
 }
 
@@ -3152,14 +3155,14 @@ img {
 /* MOBILE MESSENGERS */
 @media (max-width: 768px) {
   .messengers-float {
-    bottom: 80px;
-    right: 16px;
+    bottom: 140px;
+    right: 12px;
   }
 
   .messenger-btn {
-    width: 48px;
-    height: 48px;
-    font-size: 1.3rem;
+    width: 46px;
+    height: 46px;
+    font-size: 1.2rem;
   }
 }
 
@@ -3338,8 +3341,8 @@ img {
 /* CALLBACK MODAL */
 .callback-btn {
   position: fixed;
-  bottom: 160px;
-  right: 24px;
+  bottom: 200px;
+  right: 16px;
   width: 56px;
   height: 56px;
   border-radius: 50%;
