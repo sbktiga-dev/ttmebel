@@ -144,6 +144,9 @@ function openProductModal(id) {
               <input type="tel" id="pmOrderPhone" placeholder="+7 (___) ___-__-__" required>
             </div>
             <button type="submit" class="btn btn-primary pm-order" id="pmOrderBtn">Заказать расчёт</button>
+            <button type="button" class="btn btn-outline" onclick="addToCart(${p.id}); closeProductModal();" style="margin-top:8px;">
+              <i class="fa-solid fa-cart-plus"></i> В корзину
+            </button>
           </form>
           <div class="pm-order-success" id="pmOrderSuccess" style="display:none">
             <div style="text-align:center;padding:12px 0;color:var(--accent);font-weight:600;">✓ Заявка отправлена!</div>

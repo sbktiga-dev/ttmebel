@@ -219,6 +219,185 @@
         flex-direction: column;
         text-align: center;
       }
+      .cart-item {
+        flex-direction: column;
+        text-align: center;
+      }
+      .cart-item-info {
+        align-items: center;
+      }
+    }
+    .cart-item {
+      background: rgba(37,37,37,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(58,58,58,0.5);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.3s;
+    }
+    .cart-item:hover {
+      border-color: var(--accent);
+    }
+    .cart-item-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: rgba(139,111,175,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .cart-item-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .cart-item-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cart-item-info h4 {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .cart-item-info .cart-item-price {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .cart-item-info .cart-item-sub {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+    .cart-qty {
+      display: inline-flex;
+      align-items: center;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .cart-qty button {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-card);
+      color: var(--text);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    .cart-qty button:hover {
+      background: var(--accent);
+      color: var(--primary-dark);
+    }
+    .cart-qty span {
+      width: 36px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .cart-item-remove {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(231,76,60,0.1);
+      border: 1px solid rgba(231,76,60,0.3);
+      color: #e74c3c;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .cart-item-remove:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .cart-summary {
+      background: rgba(37,37,37,0.6);
+      border: 1px solid rgba(58,58,58,0.5);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .cart-total {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .cart-total small {
+      color: var(--text-light);
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+    .cart-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .cart-order-form {
+      background: rgba(37,37,37,0.6);
+      border: 1px solid rgba(58,58,58,0.5);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 16px;
+      display: none;
+    }
+    .cart-order-form.show {
+      display: block;
+      animation: fadeInUp 0.3s ease;
+    }
+    .cart-order-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .cart-order-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    .cart-order-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .cart-order-form input::placeholder {
+      color: var(--text-muted);
+    }
+    .cart-order-success {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: rgba(139,111,175,0.05);
+    }
+    .cart-order-success.show {
+      display: block;
+      animation: fadeInUp 0.3s ease;
     }
   </style>
 </head>
@@ -282,6 +461,11 @@
       <div class="stat-value" id="statSince">—</div>
       <div class="stat-label">С нами с</div>
     </div>
+  </div>
+
+  <div class="profile-section">
+    <h3><i class="fa-solid fa-cart-shopping"></i> Корзина</h3>
+    <div id="cartSection"></div>
   </div>
 
   <div class="profile-section">
@@ -350,6 +534,8 @@
 <button class="scroll-top" aria-label="Наверх">↑</button>
 
 <script src="js/notify.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/cart.js"></script>
 <script src="js/main.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -384,7 +570,134 @@ document.addEventListener('DOMContentLoaded', () => {
   if (favorites.length > 0) {
     renderFavorites(favorites);
   }
+
+  renderCartSection();
 });
+
+function renderCartSection() {
+  const container = document.getElementById('cartSection');
+  const cart = getCart();
+
+  if (cart.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">🛒</div><p>Корзина пуста</p><a href="catalog.html" class="btn btn-primary">Перейти в каталог</a></div>';
+    return;
+  }
+
+  loadCatalogProducts().then(products => {
+    const cartItems = cart.map(ci => {
+      const p = products.find(x => x.id === ci.id);
+      return p ? { ...ci, product: p } : null;
+    }).filter(Boolean);
+
+    if (cartItems.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="icon">🛒</div><p>Корзина пуста</p></div>';
+      return;
+    }
+
+    const SVG_MINI = { living: '🛋️', bedroom: '🛏️', kitchen: '🍽️', hallway: '🚪', kids: '🧸', budget: '💰' };
+
+    let total = 0;
+    const itemsHtml = cartItems.map(ci => {
+      const p = ci.product;
+      const num = parseInt(p.price.replace(/[^\d]/g, '')) || 0;
+      const itemTotal = num * ci.qty;
+      total += itemTotal;
+      const imgHtml = p.image ? `<img src="${escapeHtml(p.image)}" alt="">` : (SVG_MINI[p.category] || '📦');
+      return `
+        <div class="cart-item" data-id="${p.id}">
+          <div class="cart-item-icon">${imgHtml}</div>
+          <div class="cart-item-info">
+            <h4>${escapeHtml(p.name)}</h4>
+            <div class="cart-item-price">${escapeHtml(p.price)}</div>
+            <div class="cart-item-sub">${escapeHtml(p.priceUnit || '')}</div>
+          </div>
+          <div class="cart-qty">
+            <button onclick="cartChangeQty(${p.id}, ${ci.qty - 1})">−</button>
+            <span>${ci.qty}</span>
+            <button onclick="cartChangeQty(${p.id}, ${ci.qty + 1})">+</button>
+          </div>
+          <button class="cart-item-remove" onclick="cartRemoveItem(${p.id})"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      ${itemsHtml}
+      <div class="cart-summary">
+        <div class="cart-total">${total.toLocaleString('ru-RU')} ₽ <small>≈ итого</small></div>
+        <div class="cart-actions">
+          <button class="btn btn-outline" onclick="clearCart(); renderCartSection();" style="font-size:0.85rem; padding:10px 20px;">Очистить</button>
+          <button class="btn btn-primary" onclick="showCartOrderForm()" style="font-size:0.9rem; padding:12px 28px;">
+            <i class="fa-solid fa-paper-plane"></i> Отправить заявку
+          </button>
+        </div>
+      </div>
+      <div class="cart-order-form" id="cartOrderForm">
+        <h4 style="margin-bottom:16px; font-weight:700;">Контактные данные</h4>
+        <div class="form-row">
+          <input type="text" id="cartOrderName" placeholder="Ваше имя" required>
+          <input type="tel" id="cartOrderPhone" placeholder="+7 (___) ___-__-__" required>
+        </div>
+        <button class="btn btn-primary" onclick="submitCartOrder()" style="width:100%; padding:14px; font-size:1rem;">
+          <i class="fa-solid fa-paper-plane"></i> Отправить заявку
+        </button>
+      </div>
+      <div class="cart-order-success" id="cartOrderSuccess">
+        <div style="font-size:3rem; margin-bottom:12px;">✓</div>
+        <h4 style="font-weight:700; margin-bottom:8px;">Заявка отправлена!</h4>
+        <p style="color:var(--text-light);">Мы свяжемся с вами в ближайшее время</p>
+      </div>
+    `;
+  });
+}
+
+function cartChangeQty(id, qty) {
+  if (qty <= 0) {
+    removeFromCart(id);
+  } else {
+    updateCartQty(id, qty);
+  }
+  renderCartSection();
+}
+
+function cartRemoveItem(id) {
+  removeFromCart(id);
+  renderCartSection();
+}
+
+function showCartOrderForm() {
+  const form = document.getElementById('cartOrderForm');
+  if (form) form.classList.add('show');
+}
+
+function submitCartOrder() {
+  const name = document.getElementById('cartOrderName').value.trim();
+  const phone = document.getElementById('cartOrderPhone').value.trim();
+  if (!name || !phone) {
+    showToast('Заполните имя и телефон');
+    return;
+  }
+
+  const cart = getCart();
+  if (cart.length === 0) return;
+
+  loadCatalogProducts().then(products => {
+    const msg = formatCartTelegramMessage(cart, products, name, phone);
+    saveFormToStorage('cart_order', { name, phone, items: cart });
+
+    sendTelegram(msg).then(() => {
+      document.getElementById('cartOrderForm').classList.remove('show');
+      document.getElementById('cartOrderSuccess').classList.add('show');
+      clearCart();
+      showToast('Заявка отправлена!');
+    }).catch(() => {
+      document.getElementById('cartOrderForm').classList.remove('show');
+      document.getElementById('cartOrderSuccess').classList.add('show');
+      clearCart();
+      showToast('Заявка принята!');
+    });
+  });
+}
 
 function renderOrders(orders) {
   const list = document.getElementById('ordersList');
