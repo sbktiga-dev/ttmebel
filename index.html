@@ -414,18 +414,21 @@ function initGalleryStrip() {
   const dotsContainer = document.getElementById('galleryDots');
   if (!track || !dotsContainer) return;
 
-  const galleryFiles = [
-    'images/gallery/1.jfif',
-    'images/gallery/2.jfif',
-    'images/gallery/3.jfif',
-    'images/gallery/4.jfif',
-    'images/gallery/5.jfif',
-    'images/gallery/6.jfif',
-    'images/gallery/7.jfif',
-    'images/gallery/8.jfif',
-    'images/gallery/9.jfif',
-    'images/gallery/10.jfif'
-  ];
+  const siteGallery = loadSiteData();
+  let galleryFiles = (siteGallery && siteGallery.gallery && siteGallery.gallery.length)
+    ? siteGallery.gallery
+    : [
+      'images/gallery/1.jfif',
+      'images/gallery/2.jfif',
+      'images/gallery/3.jfif',
+      'images/gallery/4.jfif',
+      'images/gallery/5.jfif',
+      'images/gallery/6.jfif',
+      'images/gallery/7.jfif',
+      'images/gallery/8.jfif',
+      'images/gallery/9.jfif',
+      'images/gallery/10.jfif'
+    ];
 
   let images = [];
   let currentIndex = 0;

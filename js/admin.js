@@ -348,6 +348,8 @@ function fillAllTabs() {
 
   renderReviewsEditor(siteData.reviews || []);
 
+  renderGalleryEditor(siteData.gallery || []);
+
   if (document.getElementById('ctPhone')) document.getElementById('ctPhone').value = ct.phone || '';
   if (document.getElementById('ctPhoneHours')) document.getElementById('ctPhoneHours').value = ct.phoneHours || '';
   if (document.getElementById('ctEmail')) document.getElementById('ctEmail').value = ct.email || '';
@@ -395,6 +397,8 @@ function collectAllTabs() {
   };
 
   siteData.reviews = collectReviewsEditor();
+
+  siteData.gallery = collectGalleryEditor();
 
   siteData.contacts = {
     phone: document.getElementById('ctPhone')?.value || '',
@@ -715,6 +719,69 @@ function resetAll() {
   products = []; siteData = {};
   renderStats(); filterTable(); fillAllTabs();
   alert('Все данные удалены. Перезагрузите страницу.');
+}
+
+// ========== GALLERY EDITOR ==========
+
+function renderGalleryEditor(images) {
+  const el = document.getElementById('galleryEditor');
+  if (!el) return;
+  if (!images || !images.length) {
+    el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);">Нет фото. Добавьте изображения для галереи.</div>';
+    return;
+  }
+  el.innerHTML = images.map((img, i) => `
+    <div style="display:inline-block;position:relative;margin:6px;border:2px solid var(--border);border-radius:8px;overflow:hidden;width:120px;height:80px;">
+      <img src="${img}" style="width:100%;height:100%;object-fit:cover;" alt="Фото ${i + 1}">
+      <button onclick="removeGalleryImage(${i})" style="position:absolute;top:2px;right:2px;background:#e74c3c;color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+      <div style="position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.6);color:#fff;font-size:0.6rem;padding:2px 6px;border-radius:4px;">${i + 1}</div>
+    </div>
+  `).join('');
+}
+
+function collectGalleryEditor() {
+  return siteData.gallery || [];
+}
+
+function handleGalleryUpload(event) {
+  const files = event.target.files;
+  if (!files.length) return;
+
+  if (!siteData.gallery) siteData.gallery = [];
+
+  let processed = 0;
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxW = 1200;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxW) { h = h * maxW / w; w = maxW; }
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        siteData.gallery.push(dataUrl);
+        processed++;
+        if (processed === files.length) {
+          renderGalleryEditor(siteData.gallery);
+          showToast(`${files.length} фото добавлено в галерею`);
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+function removeGalleryImage(index) {
+  if (!confirm('Удалить это фото из галереи?')) return;
+  siteData.gallery.splice(index, 1);
+  renderGalleryEditor(siteData.gallery);
 }
 
 // ========== MODAL EVENTS ==========
