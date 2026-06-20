@@ -3278,9 +3278,10 @@ img {
 
 .bottom-nav-inner {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  max-width: 500px;
+  gap: 0;
+  max-width: 360px;
   margin: 0 auto;
 }
 
@@ -3294,9 +3295,8 @@ img {
   color: var(--text-muted);
   font-size: 0.65rem;
   font-weight: 500;
-  padding: 6px 4px;
+  padding: 6px 12px;
   transition: color 0.2s ease;
-  flex: 1;
   min-height: 52px;
   -webkit-tap-highlight-color: transparent;
 }
