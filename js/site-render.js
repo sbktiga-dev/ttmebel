@@ -73,7 +73,7 @@ function renderHomePage(d) {
   if (hp.heroImage) {
     const heroImg = document.getElementById('heroImageArea');
     if (heroImg) {
-      heroImg.innerHTML = `<img src="${hp.heroImage}" alt="" class="site-rendered-img" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg);">`;
+      heroImg.innerHTML = `<img src="${escapeHtml(hp.heroImage)}" alt="" class="site-rendered-img" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg);">`;
     }
   }
   if (hp.popularTitle) setText('popularTitle', hp.popularTitle);
@@ -88,7 +88,7 @@ function renderAboutPage(d) {
   if (ab.title) setHTML('aboutTitle', ab.title);
   if (ab.text && ab.text.length) {
     const el = document.getElementById('aboutText');
-    if (el) el.innerHTML = ab.text.map(p => `<p>${p}</p>`).join('');
+    if (el) el.innerHTML = ab.text.map(p => `<p>${escapeHtml(p)}</p>`).join('');
   }
   if (ab.companyImage) {
     const imgEl = document.getElementById('aboutCompanyImage');
@@ -107,8 +107,8 @@ function renderAboutPage(d) {
     const el = document.getElementById('aboutStats');
     if (el) el.innerHTML = ab.stats.map(s => `
       <div class="stat">
-        <div class="stat-number">${s.value}</div>
-        <div class="stat-label">${s.label}</div>
+        <div class="stat-number">${escapeHtml(s.value)}</div>
+        <div class="stat-label">${escapeHtml(s.label)}</div>
       </div>
     `).join('');
   }
@@ -119,13 +119,13 @@ function renderAboutPage(d) {
       <div class="review-card" style="text-align:center;">
         <div class="review-avatar" style="width:80px;height:80px;font-size:2rem;margin:0 auto 16px;overflow:hidden;">
           ${m.image
-            ? `<img src="${m.image}" class="site-rendered-img" loading="lazy" style="width:100%;height:100%;object-fit:cover;" alt="${m.name}">`
+            ? `<img src="${escapeHtml(m.image)}" class="site-rendered-img" loading="lazy" style="width:100%;height:100%;object-fit:cover;" alt="${escapeHtml(m.name)}">`
             : `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><circle cx="20" cy="20" r="20" fill="#c8956c"/><circle cx="20" cy="14" r="8" fill="#3d3d3d"/><path d="M8 36c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="#3d3d3d"/></svg>`
           }
         </div>
-        <h3 style="margin-bottom:4px;">${m.name}</h3>
-        <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:8px;">${m.role}</p>
-        <p style="color:var(--text-light);font-size:0.85rem;">${m.bio}</p>
+        <h3 style="margin-bottom:4px;">${escapeHtml(m.name)}</h3>
+        <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:8px;">${escapeHtml(m.role)}</p>
+        <p style="color:var(--text-light);font-size:0.85rem;">${escapeHtml(m.bio)}</p>
       </div>
     `).join('');
   }
@@ -151,8 +151,8 @@ function renderDeliveryPage(d) {
     if (el) el.innerHTML = dl.shippingMethods.map((s, i) => `
       <div class="delivery-card">
         <div class="icon">${icons[i % icons.length]}</div>
-        <h3>${s.title}</h3>
-        <p>${s.text}</p>
+        <h3>${escapeHtml(s.title)}</h3>
+        <p>${escapeHtml(s.text)}</p>
       </div>
     `).join('');
   }
@@ -162,8 +162,8 @@ function renderDeliveryPage(d) {
     if (el) el.innerHTML = dl.paymentMethods.map((p, i) => `
       <div class="delivery-card">
         <div class="icon">${payIcons[i % payIcons.length]}</div>
-        <h3>${p.title}</h3>
-        <p>${p.text}</p>
+        <h3>${escapeHtml(p.title)}</h3>
+        <p>${escapeHtml(p.text)}</p>
       </div>
     `).join('');
   }
@@ -173,8 +173,8 @@ function renderDeliveryPage(d) {
     if (el) {
       el.innerHTML = dl.faq.map(f => `
         <div class="faq-item">
-          <button class="faq-question">${f.question}</button>
-          <div class="faq-answer"><p>${f.answer}</p></div>
+          <button class="faq-question">${escapeHtml(f.question)}</button>
+          <div class="faq-answer"><p>${escapeHtml(f.answer)}</p></div>
         </div>
       `).join('');
       el.querySelectorAll('.faq-question').forEach(btn => {
@@ -200,17 +200,17 @@ function renderReviewsPage(d) {
   el.innerHTML = reviews.map(r => {
     const stars = '★★★★★';
     const avatarContent = r.avatar
-      ? `<img src="${r.avatar}" class="site-rendered-img" loading="lazy" style="width:100%;height:100%;object-fit:cover;" alt="${r.name}">`
-      : r.name ? r.name.charAt(0) : '?';
+      ? `<img src="${escapeHtml(r.avatar)}" class="site-rendered-img" loading="lazy" style="width:100%;height:100%;object-fit:cover;" alt="${escapeHtml(r.name)}">`
+      : r.name ? escapeHtml(r.name.charAt(0)) : '?';
     return `
       <div class="review-card">
         <div class="review-stars">${stars}</div>
-        <p class="review-text">${r.text}</p>
+        <p class="review-text">${escapeHtml(r.text)}</p>
         <div class="review-author">
           <div class="review-avatar">${avatarContent}</div>
           <div>
-            <div class="review-name">${r.name}</div>
-            <div class="review-date">${r.date}</div>
+            <div class="review-name">${escapeHtml(r.name)}</div>
+            <div class="review-date">${escapeHtml(r.date)}</div>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>О компании — ТТмебель</title>
   <meta name="description" content="О компании ТТмебель: наша история, команда и ценности. Мебель для дома с 2018 года.">
   <link rel="canonical" href="https://ttmebel.ru/about.html">
@@ -21,7 +21,10 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%238b6faf'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='%231a1a1a'%3EТТ%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8b6faf">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body data-page="about">
 
@@ -51,6 +54,19 @@
     </button>
   </div>
 </header>
+
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="index.html"><span itemprop="name">Главная</span></a>
+      <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span itemprop="name" class="current">О нас</span>
+      <meta itemprop="position" content="2">
+    </li>
+  </ol>
+</nav>
 
 <div class="page-header">
   <h1>О компании</h1>
@@ -137,29 +153,29 @@
     <p>Люди, которые делают ваш дом лучше</p>
   </div>
   <div class="reviews-grid" id="aboutTeam">
-    <div class="review-card" style="text-align: center;">
-      <div class="review-avatar" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 16px; background: var(--accent); display: flex; align-items: center; justify-content: center;">
-        <i class="fa-solid fa-user-tie" style="color: var(--primary-dark);"></i>
+    <div class="review-card team-card">
+      <div class="review-avatar team-avatar">
+        <i class="fa-solid fa-user-tie"></i>
       </div>
-      <h3 style="margin-bottom: 4px;">Алексей Т.</h3>
-      <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 8px;">Основатель и руководитель</p>
-      <p style="color: var(--text-light); font-size: 0.85rem;">Более 15 лет опыта в мебельном производстве</p>
+      <h3>Алексей Т.</h3>
+      <p class="team-role">Основатель и руководитель</p>
+      <p class="team-bio">Более 15 лет опыта в мебельном производстве</p>
     </div>
-    <div class="review-card" style="text-align: center;">
-      <div class="review-avatar" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 16px; background: var(--accent); display: flex; align-items: center; justify-content: center;">
-        <i class="fa-solid fa-palette" style="color: var(--primary-dark);"></i>
+    <div class="review-card team-card">
+      <div class="review-avatar team-avatar">
+        <i class="fa-solid fa-palette"></i>
       </div>
-      <h3 style="margin-bottom: 4px;">Мария Д.</h3>
-      <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 8px;">Дизайнер интерьеров</p>
-      <p style="color: var(--text-light); font-size: 0.85rem;">Поможет подобрать идеальное решение для вашего пространства</p>
+      <h3>Мария Д.</h3>
+      <p class="team-role">Дизайнер интерьеров</p>
+      <p class="team-bio">Поможет подобрать идеальное решение для вашего пространства</p>
     </div>
-    <div class="review-card" style="text-align: center;">
-      <div class="review-avatar" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 16px; background: #6b8fa3; display: flex; align-items: center; justify-content: center;">
-        <i class="fa-solid fa-screwdriver-wrench" style="color: var(--primary-dark);"></i>
+    <div class="review-card team-card">
+      <div class="review-avatar team-avatar" style="background: #6b8fa3;">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
       </div>
-      <h3 style="margin-bottom: 4px;">Сергей К.</h3>
-      <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 8px;">Мастер по сборке</p>
-      <p style="color: var(--text-light); font-size: 0.85rem;">Соберёт и установит мебель быстро и аккуратно</p>
+      <h3>Сергей К.</h3>
+      <p class="team-role">Мастер по сборке</p>
+      <p class="team-bio">Соберёт и установит мебель быстро и аккуратно</p>
     </div>
   </div>
 </section>
@@ -234,7 +250,13 @@
   </a>
 </div>
 
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
 <script src="js/notify.js"></script>
+<script src="js/analytics.js"></script>
 <script src="js/site-render.js"></script>
 <script src="js/main.js"></script>
 <script>

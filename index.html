@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>ТТмебель — Мебель для дома с доставкой</title>
   <meta name="description" content="ТТмебель — мебель для дома в Краснодаре. Качественная мебель: гостиная, спальня, кухня. Готовая мебель и изготовление под заказ. Доставка и установка. Тел: +7 (999) 123-45-67">
   <meta name="keywords" content="мебель краснодар, мебель для дома, купить мебель, мебель под заказ, гостиная, спальня, кухня, прихожая, детская, ТТмебель, мебель краснодар недорого">
@@ -22,7 +22,11 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%238b6faf'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='%231a1a1a'%3EТТ%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8b6faf">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%238b6faf'/%3E%3Ctext x='90' y='120' font-size='90' font-weight='bold' text-anchor='middle' fill='%231a1a1a'%3EТТ%3C/text%3E%3C/svg%3E">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -175,6 +179,13 @@
   <div style="text-align: center; margin-top: 40px;">
     <a href="catalog.html" class="btn btn-outline">Весь каталог →</a>
   </div>
+</section>
+<section class="section section-alt recently-viewed-section">
+  <div class="section-title">
+    <h2>Вы смотрели</h2>
+    <p>Недавно просмотренные товары</p>
+  </div>
+  <div class="catalog-grid" id="recentlyViewedGrid"></div>
 </section>
 <section class="section section-warm">
   <div class="section-title">
@@ -359,7 +370,27 @@
   </div>
 </div>
 
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
+<script>
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ym(0, "init", {
+  clickmap:true,
+  trackLinks:true,
+  accurateTrackBounce:true,
+  webvisor:true
+});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/0" style="position:absolute; left:-9999px;" alt=""></div></noscript>
 <script src="js/notify.js"></script>
+<script src="js/analytics.js"></script>
 <script src="js/site-render.js"></script>
 <script src="js/catalog.js"></script>
 <script src="js/main.js"></script>
@@ -371,6 +402,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('popularGrid');
     grid.innerHTML = items.map(renderCatalogCard).join('');
   });
+
+  renderRecentlyViewed('recentlyViewedGrid');
+  updateComparisonBar();
 
   initGalleryStrip();
 });

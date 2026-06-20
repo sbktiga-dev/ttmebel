@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Админ-панель — ТТмебель</title>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
@@ -206,20 +207,6 @@
         <input type="file" id="importProductsInput" class="hidden-input" accept=".json" onchange="importProducts(event)">
         <button class="btn btn-outline btn-sm" onclick="exportSite()">🌐 Экспорт настроек</button>
         <button class="btn btn-outline btn-sm" onclick="document.getElementById('importSiteInput').click()">📤 Импорт настроек</button>
-        <input type="file" id="importSiteInput" class="hidden-input" accept=".json" onchange="importSite(event)">
-        <button class="btn btn-danger btn-sm" onclick="resetAll()">🗑️ Сбросить всё</button>
-      </div>
-    </div>
-    <button class="btn btn-primary" onclick="saveSiteData()">Сохранить</button>
-  </div>
-    <div class="section-card">
-      <h3>Управление данными</h3>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <button class="btn btn-outline btn-sm" onclick="exportProducts()">📦 Экспорт товаров</button>
-        <button class="btn btn-outline btn-sm" onclick="document.getElementById('importProductsInput').click()">📤 Импорт товаров</button>
-        <input type="file" id="importProductsInput" class="hidden-input" accept=".json" onchange="importProducts(event)">
-        <button class="btn btn-outline btn-sm" onclick="exportSite()">🌐 Экспорт настроек сайта</button>
-        <button class="btn btn-outline btn-sm" onclick="document.getElementById('importSiteInput').click()">📤 Импорт настроек сайта</button>
         <input type="file" id="importSiteInput" class="hidden-input" accept=".json" onchange="importSite(event)">
         <button class="btn btn-danger btn-sm" onclick="resetAll()">🗑️ Сбросить всё</button>
       </div>
