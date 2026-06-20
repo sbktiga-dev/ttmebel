@@ -730,13 +730,16 @@ function renderGalleryEditor(images) {
     el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);">Нет фото. Добавьте изображения для галереи.</div>';
     return;
   }
-  el.innerHTML = images.map((img, i) => `
-    <div style="display:inline-block;position:relative;margin:6px;border:2px solid var(--border);border-radius:8px;overflow:hidden;width:120px;height:80px;">
-      <img src="${img}" style="width:100%;height:100%;object-fit:cover;" alt="Фото ${i + 1}">
-      <button onclick="removeGalleryImage(${i})" style="position:absolute;top:2px;right:2px;background:#e74c3c;color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-      <div style="position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.6);color:#fff;font-size:0.6rem;padding:2px 6px;border-radius:4px;">${i + 1}</div>
-    </div>
-  `).join('');
+  el.innerHTML = '';
+  setTimeout(() => {
+    el.innerHTML = images.map((img, i) => `
+      <div style="display:inline-block;position:relative;margin:6px;border:2px solid var(--border);border-radius:8px;overflow:hidden;width:120px;height:80px;">
+        <img src="${img}" style="width:100%;height:100%;object-fit:cover;" alt="Фото ${i + 1}">
+        <button onclick="removeGalleryImage(${i})" style="position:absolute;top:2px;right:2px;background:#e74c3c;color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+        <div style="position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.6);color:#fff;font-size:0.6rem;padding:2px 6px;border-radius:4px;">${i + 1}</div>
+      </div>
+    `).join('');
+  }, 50);
 }
 
 function collectGalleryEditor() {
