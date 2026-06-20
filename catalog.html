@@ -104,6 +104,22 @@
     <div class="catalog-search">
       <input type="text" id="searchInput" placeholder="Поиск по названию...">
     </div>
+    <div class="price-dropdown" id="priceDropdown">
+      <button class="price-dropdown-btn" onclick="togglePriceDropdown()">
+        <i class="fa-solid fa-tag"></i> Цена
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div class="price-dropdown-panel" id="priceDropdownPanel">
+        <label>От (₽)</label>
+        <input type="number" id="priceMin" placeholder="Минимум" min="0" step="1000">
+        <label style="margin-top:8px;">До (₽)</label>
+        <input type="number" id="priceMax" placeholder="Максимум" min="0" step="1000">
+        <div class="price-dropdown-actions">
+          <button class="price-reset-btn" onclick="resetPriceFilter()">Сбросить</button>
+          <button class="price-apply-btn" onclick="applyPriceDropdown()">Применить</button>
+        </div>
+      </div>
+    </div>
     <div class="catalog-sort">
       <select id="sortSelect">
         <option value="default">Сортировка</option>
@@ -120,8 +136,8 @@
     </div>
     <div class="catalog-per-page">
       <select id="perPageSelect" onchange="changePerPage(this.value)">
-        <option value="9">9 на странице</option>
-        <option value="18">18 на странице</option>
+        <option value="9">9</option>
+        <option value="18">18</option>
         <option value="all">Все</option>
       </select>
     </div>
@@ -138,16 +154,7 @@
     <button class="filter-btn" data-filter="budget">Бюджетная</button>
   </div>
 
-  <div class="price-filter" id="priceFilter">
-    <div class="price-filter-inner">
-      <span class="price-filter-label">Цена:</span>
-      <input type="number" id="priceMin" placeholder="от" min="0" step="1000">
-      <span class="price-filter-sep">—</span>
-      <input type="number" id="priceMax" placeholder="до" min="0" step="1000">
-      <button class="price-filter-btn" onclick="applyPriceFilter()">OK</button>
-      <button class="price-filter-reset" onclick="resetPriceFilter()">✕</button>
-    </div>
-  </div>
+  <div id="activeFilters" class="catalog-active-filters"></div>
 
   <div class="catalog-grid" id="catalogGrid">
     <div class="skeleton skeleton-card"></div>
@@ -288,7 +295,18 @@ document.addEventListener('DOMContentLoaded', () => {
       b.classList.toggle('active', b.dataset.filter === activeFilter);
     });
     renderFiltered();
+    updateActiveFilters();
   });
+
+  document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('priceDropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+      document.getElementById('priceDropdownPanel').classList.remove('open');
+      document.querySelector('.price-dropdown-btn').classList.remove('active');
+    }
+  });
+
+  updateActiveFilters();
 });
 
 function renderFiltered(reset = true) {
@@ -417,6 +435,7 @@ function initFilters() {
         history.pushState(null, '', 'catalog.html#' + activeFilter);
       }
       renderFiltered();
+      updateActiveFilters();
     });
   });
 }
@@ -439,6 +458,7 @@ function applyPriceFilter() {
   priceMin = parseInt(minVal) || 0;
   priceMax = parseInt(maxVal) || Infinity;
   renderFiltered();
+  updateActiveFilters();
 }
 
 function resetPriceFilter() {
@@ -447,6 +467,44 @@ function resetPriceFilter() {
   priceMin = 0;
   priceMax = Infinity;
   renderFiltered();
+  updateActiveFilters();
+  document.getElementById('priceDropdownPanel').classList.remove('open');
+  document.querySelector('.price-dropdown-btn').classList.remove('active');
+}
+
+function togglePriceDropdown() {
+  const panel = document.getElementById('priceDropdownPanel');
+  const btn = document.querySelector('.price-dropdown-btn');
+  panel.classList.toggle('open');
+  btn.classList.toggle('active');
+}
+
+function applyPriceDropdown() {
+  applyPriceFilter();
+  document.getElementById('priceDropdownPanel').classList.remove('open');
+  document.querySelector('.price-dropdown-btn').classList.remove('active');
+}
+
+function updateActiveFilters() {
+  const el = document.getElementById('activeFilters');
+  if (!el) return;
+  let tags = '';
+  if (priceMin > 0 || priceMax < Infinity) {
+    const label = priceMin > 0 && priceMax < Infinity
+      ? `Цена: ${priceMin.toLocaleString('ru-RU')} — ${priceMax.toLocaleString('ru-RU')} ₽`
+      : priceMin > 0
+        ? `Цена от ${priceMin.toLocaleString('ru-RU')} ₽`
+        : `Цена до ${priceMax.toLocaleString('ru-RU')} ₽`;
+    tags += `<span class="active-filter-tag">${label} <button onclick="resetPriceFilter()">✕</button></span>`;
+  }
+  if (activeFilter !== 'all') {
+    const catLabels = { living: 'Гостиная', bedroom: 'Спальня', kitchen: 'Кухня', hallway: 'Прихожая', kids: 'Детская', budget: 'Бюджетная' };
+    tags += `<span class="active-filter-tag">${catLabels[activeFilter] || activeFilter} <button onclick="document.querySelector('[data-filter=all]').click()">✕</button></span>`;
+  }
+  if (searchQuery) {
+    tags += `<span class="active-filter-tag">"${searchQuery}" <button onclick="document.getElementById('searchInput').value=''; searchQuery=''; renderFiltered(); updateActiveFilters();">✕</button></span>`;
+  }
+  el.innerHTML = tags;
 }
 
 function setView(mode) {
