@@ -1,0 +1,21 @@
+{
+  "name": "ТТмебель — Мебель для дома",
+  "short_name": "ТТмебель",
+  "description": "Качественная мебель для дома с доставкой и установкой. Готовая мебель и изготовление под заказ.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#8b6faf",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%238b6faf'/%3E%3Ctext x='256' y='340' font-size='250' font-weight='bold' text-anchor='middle' fill='%231a1a1a'%3EТТ%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "business"],
+  "lang": "ru",
+  "dir": "ltr"
+}

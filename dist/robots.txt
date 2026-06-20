@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /profile.html
+
+User-agent: Yandex
+Allow: /
+
+Sitemap: https://ttmebel.ru/sitemap.xml
