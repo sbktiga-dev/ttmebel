@@ -1539,6 +1539,10 @@ img {
 
 /* RESPONSIVE — MOBILE */
 @media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
   .nav {
     display: none;
     position: fixed;
@@ -1587,6 +1591,7 @@ img {
 
   .hero {
     padding: 30px 16px 50px;
+    overflow: hidden;
   }
 
   .hero h1 {
@@ -1711,6 +1716,7 @@ img {
 
   .section {
     padding: 40px 16px;
+    overflow: hidden;
   }
 
   .section-title {
@@ -1772,11 +1778,12 @@ img {
   }
 
   .gallery-strip {
-    margin: 0 40px;
+    margin: 0 36px;
   }
 
   .gallery-strip-wrapper {
-    padding: 20px 0;
+    padding: 16px 0;
+    overflow: hidden;
   }
 
   .callback-btn {
@@ -3267,22 +3274,23 @@ img {
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
   background: rgba(20,20,20,0.97);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(139,111,175,0.2);
   z-index: 100;
-  padding: 6px 0;
-  padding-bottom: max(6px, env(safe-area-inset-bottom, 6px));
+  padding: 4px 0;
+  padding-bottom: max(4px, env(safe-area-inset-bottom, 4px));
+  box-sizing: border-box;
 }
 
 .bottom-nav-inner {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  gap: 0;
-  max-width: 360px;
-  margin: 0 auto;
+  width: 100%;
+  padding: 0 4px;
 }
 
 .bottom-nav a {
@@ -3290,14 +3298,15 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
   text-decoration: none;
   color: var(--text-muted);
   font-size: 0.65rem;
   font-weight: 500;
-  padding: 6px 12px;
+  padding: 4px 2px;
   transition: color 0.2s ease;
-  min-height: 52px;
+  flex: 1;
+  min-height: 48px;
   -webkit-tap-highlight-color: transparent;
 }
 
