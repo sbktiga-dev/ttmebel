@@ -768,6 +768,7 @@ function handleGalleryUpload(event) {
         processed++;
         if (processed === files.length) {
           renderGalleryEditor(siteData.gallery);
+          autoSaveSiteData();
           showToast(`${files.length} фото добавлено в галерею`);
         }
       };
@@ -782,6 +783,18 @@ function removeGalleryImage(index) {
   if (!confirm('Удалить это фото из галереи?')) return;
   siteData.gallery.splice(index, 1);
   renderGalleryEditor(siteData.gallery);
+  autoSaveSiteData();
+}
+
+function autoSaveSiteData() {
+  try {
+    const json = JSON.stringify(siteData);
+    if (json.length > 4.5 * 1024 * 1024) {
+      showToast('Данные слишком большие!');
+      return;
+    }
+    localStorage.setItem('ttmebel_site', json);
+  } catch (e) {}
 }
 
 // ========== MODAL EVENTS ==========
