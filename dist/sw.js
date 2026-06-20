@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ttmebel-v2';
+const CACHE_NAME = 'ttmebel-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -7,12 +7,14 @@ const STATIC_ASSETS = [
   '/delivery.html',
   '/reviews.html',
   '/contacts.html',
+  '/product.html',
   '/css/style.css',
   '/css/admin.css',
   '/js/main.js',
   '/js/catalog.js',
   '/js/site-render.js',
   '/js/notify.js',
+  '/js/cart.js',
   '/data/products.json',
   '/data/site.json',
   '/data/config.json',
@@ -55,6 +57,19 @@ self.addEventListener('fetch', (event) => {
           return cached || fetched;
         });
       })
+    );
+    return;
+  }
+
+  if (request.url.includes('/data/') || request.url.endsWith('.html') || request.url.endsWith('/')) {
+    event.respondWith(
+      fetch(request).then((response) => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+        }
+        return response;
+      }).catch(() => caches.match(request))
     );
     return;
   }
