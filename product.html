@@ -40,6 +40,9 @@
     .product-fav-btn:hover { background: rgba(231,76,60,0.2); transform: scale(1.1); }
     .product-comp-btn { width: 48px; height: 48px; border-radius: 50%; background: rgba(139,111,175,0.1); border: 1px solid rgba(139,111,175,0.3); color: var(--accent); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.2s; flex-shrink: 0; }
     .product-comp-btn:hover { background: rgba(139,111,175,0.2); transform: scale(1.1); }
+    .star-rating { display: flex; gap: 4px; font-size: 1.8rem; cursor: pointer; }
+    .star-rating .star { color: var(--text-muted); transition: color 0.15s; user-select: none; }
+    .star-rating .star.active, .star-rating .star:hover { color: var(--accent); }
     .related-section { margin-top: 60px; }
     .related-section h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 24px; }
     @media (max-width: 768px) {
@@ -144,6 +147,28 @@
   <div class="related-section">
     <h2>Похожие товары</h2>
     <div class="catalog-grid" id="relatedGrid"></div>
+  </div>
+
+  <div class="related-section">
+    <h2>Отзывы о товаре</h2>
+    <div id="productReviews"></div>
+    <div class="review-form-card" style="background:rgba(37,37,37,0.6);border:1px solid rgba(58,58,58,0.5);border-radius:16px;padding:24px;margin-top:24px;">
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:16px;">Оставить отзыв</h3>
+      <div class="star-rating" id="starRating" style="margin-bottom:16px;">
+        <span class="star" data-rating="1">☆</span>
+        <span class="star" data-rating="2">☆</span>
+        <span class="star" data-rating="3">☆</span>
+        <span class="star" data-rating="4">☆</span>
+        <span class="star" data-rating="5">☆</span>
+      </div>
+      <div style="margin-bottom:12px;">
+        <input type="text" id="reviewName" placeholder="Ваше имя" style="width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;background:var(--bg);color:var(--text);box-sizing:border-box;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <textarea id="reviewText" rows="3" placeholder="Ваш отзыв..." style="width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;background:var(--bg);color:var(--text);resize:vertical;box-sizing:border-box;"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="submitProductReview()" style="padding:12px 28px;">Отправить отзыв</button>
+    </div>
   </div>
 </div>
 
@@ -272,8 +297,72 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof isFavorite === 'function' && isFavorite(p.id)) {
       document.getElementById('productFavBtn').querySelector('i').className = 'fa-solid fa-heart';
     }
+
+    renderProductReviews(p.id);
   });
 });
+
+let selectedRating = 5;
+
+document.querySelectorAll('#starRating .star').forEach(star => {
+  star.addEventListener('click', () => {
+    selectedRating = parseInt(star.dataset.rating);
+    document.querySelectorAll('#starRating .star').forEach((s, i) => {
+      s.textContent = i < selectedRating ? '★' : '☆';
+      s.classList.toggle('active', i < selectedRating);
+    });
+  });
+  star.addEventListener('mouseenter', () => {
+    const r = parseInt(star.dataset.rating);
+    document.querySelectorAll('#starRating .star').forEach((s, i) => {
+      s.textContent = i < r ? '★' : '☆';
+    });
+  });
+});
+
+document.getElementById('starRating').addEventListener('mouseleave', () => {
+  document.querySelectorAll('#starRating .star').forEach((s, i) => {
+    s.textContent = i < selectedRating ? '★' : '☆';
+  });
+});
+
+function getProductReviews(productId) {
+  return JSON.parse(localStorage.getItem('ttmebel_reviews_' + productId) || '[]');
+}
+
+function saveProductReview(productId, review) {
+  const reviews = getProductReviews(productId);
+  reviews.unshift(review);
+  localStorage.setItem('ttmebel_reviews_' + productId, JSON.stringify(reviews));
+}
+
+function renderProductReviews(productId) {
+  const container = document.getElementById('productReviews');
+  if (!container) return;
+  const reviews = getProductReviews(productId);
+
+  if (reviews.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-light);">Пока нет отзывов. Будьте первым!</p>';
+    return;
+  }
+
+  const avgRating = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+  container.innerHTML = `
+    <div style="margin-bottom:16px;color:var(--accent);font-size:1.2rem;">
+      ${'★'.repeat(Math.round(avgRating))}${'☆'.repeat(5 - Math.round(avgRating))}
+      <span style="color:var(--text-light);font-size:0.9rem;margin-left:8px;">${avgRating.toFixed(1)} · ${reviews.length} отзыв${reviews.length > 1 ? (reviews.length < 5 ? 'а' : '') : ''}</span>
+    </div>
+    ${reviews.map(r => `
+      <div style="background:rgba(37,37,37,0.6);border:1px solid rgba(58,58,58,0.5);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <div style="color:var(--accent);margin-bottom:8px;">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+        <p style="color:var(--text);margin-bottom:8px;">${escapeHtml(r.text)}</p>
+        <div style="display:flex;justify-content:space-between;color:var(--text-light);font-size:0.85rem;">
+          <span>${escapeHtml(r.name)}</span>
+          <span>${new Date(r.date).toLocaleDateString('ru-RU')}</span>
+        </div>
+      </div>
+    `).join('')}
+  `;
 
 function switchProductPageImage(index) {
   if (index < 0 || index >= currentProductImages.length) return;
@@ -303,6 +392,31 @@ function submitProductPageOrder() {
       showToast('Заявка принята!');
     });
   });
+}
+
+function submitProductReview() {
+  const name = document.getElementById('reviewName').value.trim();
+  const text = document.getElementById('reviewText').value.trim();
+  if (!name || !text) { showToast('Заполните имя и отзыв'); return; }
+
+  const review = {
+    name: name,
+    text: text,
+    rating: selectedRating,
+    date: new Date().toISOString()
+  };
+
+  saveProductReview(currentProductId, review);
+  renderProductReviews(currentProductId);
+
+  document.getElementById('reviewName').value = '';
+  document.getElementById('reviewText').value = '';
+  selectedRating = 5;
+  document.querySelectorAll('#starRating .star').forEach((s, i) => {
+    s.textContent = i < 5 ? '★' : '☆';
+  });
+
+  showToast('Отзыв добавлен!');
 }
 </script>
 </body>

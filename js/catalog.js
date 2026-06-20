@@ -84,12 +84,12 @@ function openProductModal(id) {
     currentImageIndex = 0;
 
     const mainImageHtml = allImgs.length > 0
-      ? `<img id="pmMainImg" src="${escapeHtml(allImgs[0])}" alt="${escapeHtml(p.name)}" onclick="openLightbox(currentProductImages, currentImageIndex)" style="cursor:zoom-in">`
+      ? `<img id="pmMainImg" src="${escapeHtml(allImgs[0])}" alt="${escapeHtml(p.name)}" loading="lazy" onclick="openLightbox(currentProductImages, currentImageIndex)" style="cursor:zoom-in">`
       : `<div class="pm-placeholder">${getPlaceholder(p.category)}</div>`;
 
     const thumbsHtml = allImgs.length > 1
       ? `<div class="pm-thumbs">${allImgs.map((img, i) =>
-          `<div class="pm-thumb ${i === 0 ? 'active' : ''}" onclick="switchProductImage(${i})"><img src="${escapeHtml(img)}" alt=""></div>`
+          `<div class="pm-thumb ${i === 0 ? 'active' : ''}" onclick="switchProductImage(${i})"><img src="${escapeHtml(img)}" alt="" loading="lazy"></div>`
         ).join('')}</div>`
       : '';
 

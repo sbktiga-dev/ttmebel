@@ -123,6 +123,42 @@
   </div>
   <div class="faq-list" id="faqList"></div>
 </section>
+<section class="section">
+  <div class="section-title">
+    <h2>Калькулятор доставки</h2>
+    <p>Рассчитайте стоимость доставки по вашему адресу</p>
+  </div>
+  <div style="max-width:600px;margin:0 auto;">
+    <div style="background:rgba(37,37,37,0.6);border:1px solid rgba(58,58,58,0.5);border-radius:16px;padding:28px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div>
+          <label style="display:block;font-weight:600;margin-bottom:6px;font-size:0.9rem;">Район</label>
+          <select id="calcDistrict" onchange="calculateDelivery()" style="width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;background:var(--bg);color:var(--text);">
+            <option value="">Выберите район</option>
+            <option value="center">Центральный</option>
+            <option value="west">Западный</option>
+            <option value="east">Восточный</option>
+            <option value="north">Северный</option>
+            <option value="south">Южный</option>
+            <option value="krasninskiy">Краснинский</option>
+            <option value="karasunsky">Карасунский</option>
+            <option value="other">Другой район</option>
+            <option value="region">Краснодарский край</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-weight:600;margin-bottom:6px;font-size:0.9rem;">Сумма заказа</label>
+          <input type="number" id="calcSum" placeholder="₽" oninput="calculateDelivery()" style="width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;background:var(--bg);color:var(--text);">
+        </div>
+      </div>
+      <div id="calcResult" style="display:none;padding:16px;background:rgba(139,111,175,0.08);border:1px solid rgba(139,111,175,0.2);border-radius:12px;text-align:center;">
+        <div style="font-size:0.9rem;color:var(--text-light);margin-bottom:8px;">Стоимость доставки:</div>
+        <div id="calcPrice" style="font-size:2rem;font-weight:800;color:var(--accent);"></div>
+        <div id="calcNote" style="font-size:0.85rem;color:var(--text-light);margin-top:4px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
 <section class="section section-pattern">
   <div class="section-title">
     <h2>Зона доставки</h2>
@@ -214,5 +250,46 @@
 <script src="js/analytics.js"></script>
 <script src="js/site-render.js"></script>
 <script src="js/main.js"></script>
+<script>
+const DELIVERY_RATES = {
+  center: { base: 500, perKm: 0, freeFrom: 15000 },
+  west: { base: 700, perKm: 10, freeFrom: 20000 },
+  east: { base: 700, perKm: 10, freeFrom: 20000 },
+  north: { base: 800, perKm: 15, freeFrom: 20000 },
+  south: { base: 800, perKm: 15, freeFrom: 20000 },
+  krasninskiy: { base: 900, perKm: 20, freeFrom: 25000 },
+  karasunsky: { base: 600, perKm: 5, freeFrom: 15000 },
+  other: { base: 1000, perKm: 25, freeFrom: 30000 },
+  region: { base: 1500, perKm: 30, freeFrom: 50000 }
+};
+
+function calculateDelivery() {
+  const district = document.getElementById('calcDistrict').value;
+  const sum = parseInt(document.getElementById('calcSum').value) || 0;
+  const resultEl = document.getElementById('calcResult');
+  const priceEl = document.getElementById('calcPrice');
+  const noteEl = document.getElementById('calcNote');
+
+  if (!district) { resultEl.style.display = 'none'; return; }
+
+  const rate = DELIVERY_RATES[district];
+  if (!rate) { resultEl.style.display = 'none'; return; }
+
+  resultEl.style.display = 'block';
+
+  if (sum >= rate.freeFrom) {
+    priceEl.textContent = 'Бесплатно';
+    noteEl.textContent = 'При заказе от ' + rate.freeFrom.toLocaleString('ru-RU') + ' ₽ доставка бесплатная';
+  } else {
+    priceEl.textContent = rate.base.toLocaleString('ru-RU') + ' ₽';
+    const need = rate.freeFrom - sum;
+    if (need > 0 && need < rate.freeFrom) {
+      noteEl.textContent = 'Добавьте ещё ' + need.toLocaleString('ru-RU') + ' ₽ для бесплатной доставки';
+    } else {
+      noteEl.textContent = 'Базовая стоимость доставки';
+    }
+  }
+}
+</script>
 </body>
 </html>

@@ -128,6 +128,8 @@ function editProduct(id) {
   document.getElementById('pPrice').value = p.price;
   document.getElementById('pPriceUnit').value = p.priceUnit || '/шт';
   document.getElementById('pDesc').value = p.description || '';
+  document.getElementById('pMaterial').value = p.material || '';
+  document.getElementById('pColor').value = p.color || '';
   currentImageData = p.image || null;
   currentMultiImages = (p.images && p.images.length) ? [...p.images] : [];
   if (currentImageData) {
@@ -151,6 +153,8 @@ function saveProduct(e) {
     price: document.getElementById('pPrice').value.trim(),
     priceUnit: document.getElementById('pPriceUnit').value.trim(),
     badge: document.getElementById('pBadge').value,
+    material: document.getElementById('pMaterial').value,
+    color: document.getElementById('pColor').value.trim(),
     image: currentImageData || '', images: currentMultiImages,
     description: document.getElementById('pDesc').value.trim()
   };
@@ -262,6 +266,10 @@ function compressImage(dataUrl, maxWidth, quality) {
       canvas.height = img.height * ratio;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      try {
+        const webp = canvas.toDataURL('image/webp', quality);
+        if (webp && webp.length < dataUrl.length) { resolve(webp); return; }
+      } catch(e) {}
       resolve(canvas.toDataURL('image/jpeg', quality));
     };
     img.onerror = () => resolve(dataUrl);
@@ -766,7 +774,11 @@ function handleGalleryUpload(event) {
         canvas.width = w;
         canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        let dataUrl;
+        try {
+          const webp = canvas.toDataURL('image/webp', 0.8);
+          dataUrl = (webp && webp.length < canvas.toDataURL('image/jpeg', 0.8).length) ? webp : canvas.toDataURL('image/jpeg', 0.8);
+        } catch(e) { dataUrl = canvas.toDataURL('image/jpeg', 0.8); }
         siteData.gallery.push(dataUrl);
         processed++;
         if (processed === files.length) {

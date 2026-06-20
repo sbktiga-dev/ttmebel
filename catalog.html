@@ -114,6 +114,17 @@
         <option value="new">Сначала новые</option>
       </select>
     </div>
+    <div class="catalog-view-toggle">
+      <button class="view-btn active" data-view="grid" onclick="setView('grid')" title="Сетка"><i class="fa-solid fa-grid-2"></i></button>
+      <button class="view-btn" data-view="list" onclick="setView('list')" title="Список"><i class="fa-solid fa-list"></i></button>
+    </div>
+    <div class="catalog-per-page">
+      <select id="perPageSelect" onchange="changePerPage(this.value)">
+        <option value="9">9 на странице</option>
+        <option value="18">18 на странице</option>
+        <option value="all">Все</option>
+      </select>
+    </div>
     <div class="catalog-count" id="catalogCount"></div>
   </div>
 
@@ -248,6 +259,7 @@ let sortType = 'default';
 let showCount = 9;
 let priceMin = 0;
 let priceMax = Infinity;
+let viewMode = 'grid';
 const ITEMS_PER_PAGE = 9;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -303,7 +315,10 @@ function renderFiltered(reset = true) {
 
   filtered = sortProducts(filtered);
 
-  if (reset) showCount = ITEMS_PER_PAGE;
+  if (reset) {
+    const perPage = document.getElementById('perPageSelect')?.value;
+    showCount = perPage === 'all' ? 9999 : (parseInt(perPage) || ITEMS_PER_PAGE);
+  }
 
   const visible = filtered.slice(0, showCount);
   const hasMore = showCount < filtered.length;
@@ -431,6 +446,22 @@ function resetPriceFilter() {
   document.getElementById('priceMax').value = '';
   priceMin = 0;
   priceMax = Infinity;
+  renderFiltered();
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === mode));
+  const grid = document.getElementById('catalogGrid');
+  if (grid) grid.classList.toggle('list-view', mode === 'list');
+}
+
+function changePerPage(val) {
+  if (val === 'all') {
+    showCount = 9999;
+  } else {
+    showCount = parseInt(val) || 9;
+  }
   renderFiltered();
 }
 </script>
