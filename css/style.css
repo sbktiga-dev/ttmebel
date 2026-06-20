@@ -1333,6 +1333,101 @@ img {
   font-size: 0.9rem;
 }
 
+/* PRICE FILTER */
+.price-filter {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.price-filter-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(37,37,37,0.5);
+  border: 1px solid rgba(58,58,58,0.5);
+  border-radius: 50px;
+  padding: 6px 12px;
+}
+
+.price-filter-label {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.price-filter-inner input {
+  width: 100px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+  text-align: center;
+}
+
+.price-filter-inner input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.price-filter-inner input::placeholder {
+  color: var(--text-muted);
+}
+
+.price-filter-sep {
+  color: var(--text-muted);
+}
+
+.price-filter-btn {
+  padding: 8px 16px;
+  background: var(--accent);
+  color: var(--primary-dark);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.price-filter-btn:hover {
+  background: var(--accent-hover);
+}
+
+.price-filter-reset {
+  padding: 8px 10px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.price-filter-reset:hover {
+  color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+@media (max-width: 768px) {
+  .price-filter-inner {
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 16px;
+    padding: 10px 14px;
+  }
+
+  .price-filter-inner input {
+    width: 80px;
+    font-size: 16px;
+  }
+}
+
 /* BREADCRUMBS */
 .breadcrumbs {
   max-width: 1200px;

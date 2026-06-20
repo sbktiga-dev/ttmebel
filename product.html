@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Товар — ТТмебель</title>
+  <meta name="description" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=2.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%238b6faf'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='%231a1a1a'%3EТТ%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8b6faf">
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    .product-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+    .product-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: start; }
+    .product-gallery { position: relative; }
+    .product-main-img { width: 100%; aspect-ratio: 1/1; background: var(--bg-card); border-radius: var(--radius-lg); overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); cursor: zoom-in; }
+    .product-main-img img { width: 100%; height: 100%; object-fit: cover; }
+    .product-main-img .placeholder { font-size: 5rem; opacity: 0.3; }
+    .product-thumbs { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; }
+    .product-thumb { width: 72px; height: 72px; border-radius: 8px; overflow: hidden; border: 2px solid var(--border); cursor: pointer; flex-shrink: 0; transition: border-color 0.2s; }
+    .product-thumb.active { border-color: var(--accent); }
+    .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .product-info { position: sticky; top: 100px; }
+    .product-category { color: var(--text-light); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; margin-bottom: 8px; }
+    .product-title { font-size: 2rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+    .product-price { font-size: 2.2rem; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+    .product-price small { font-size: 1rem; font-weight: 400; color: var(--text-light); }
+    .product-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: var(--accent); color: var(--primary-dark); margin-bottom: 16px; }
+    .product-desc { color: var(--text-light); font-size: 1rem; line-height: 1.7; margin-bottom: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .product-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+    .product-meta-item { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 10px 14px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border); }
+    .product-meta-item span { color: var(--text-light); }
+    .product-actions { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .product-actions .btn { flex: 1; min-width: 140px; justify-content: center; }
+    .product-fav-btn { width: 48px; height: 48px; border-radius: 50%; background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); color: #e74c3c; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.2s; flex-shrink: 0; }
+    .product-fav-btn:hover { background: rgba(231,76,60,0.2); transform: scale(1.1); }
+    .product-comp-btn { width: 48px; height: 48px; border-radius: 50%; background: rgba(139,111,175,0.1); border: 1px solid rgba(139,111,175,0.3); color: var(--accent); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.2s; flex-shrink: 0; }
+    .product-comp-btn:hover { background: rgba(139,111,175,0.2); transform: scale(1.1); }
+    .related-section { margin-top: 60px; }
+    .related-section h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 24px; }
+    @media (max-width: 768px) {
+      .product-layout { grid-template-columns: 1fr; gap: 24px; }
+      .product-info { position: static; }
+      .product-title { font-size: 1.5rem; }
+      .product-price { font-size: 1.8rem; }
+      .product-meta { grid-template-columns: 1fr; }
+      .product-actions { flex-direction: column; }
+      .product-actions .btn { min-width: auto; }
+    }
+  </style>
+</head>
+<body data-page="product">
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">ТТ</div>
+      <div class="logo-text">
+        <span class="logo-name">ТТмебель</span>
+        <span class="logo-sub">Мебель для дома</span>
+      </div>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="index.html">Главная</a>
+      <a href="catalog.html">Каталог</a>
+      <a href="about.html">О нас</a>
+      <a href="delivery.html">Доставка</a>
+      <a href="reviews.html">Отзывы</a>
+      <a href="contacts.html">Контакты</a>
+    </nav>
+    <div class="header-right">
+      <a href="tel:+79991234567" class="header-phone" data-phone-href data-phone>+7 (999) 123-45-67</a>
+      <a href="admin.html" class="btn-admin">Админ</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="index.html"><span itemprop="name">Главная</span></a>
+      <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="catalog.html"><span itemprop="name">Каталог</span></a>
+      <meta itemprop="position" content="2">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span itemprop="name" class="current" id="bcCategory">Товар</span>
+      <meta itemprop="position" content="3">
+    </li>
+  </ol>
+</nav>
+
+<div class="product-page">
+  <div class="product-layout">
+    <div class="product-gallery">
+      <div class="product-main-img" id="productMainImg" onclick="openLightbox(currentProductImages, 0)">
+        <div class="placeholder">📦</div>
+      </div>
+      <div class="product-thumbs" id="productThumbs"></div>
+    </div>
+    <div class="product-info">
+      <div class="product-category" id="productCategory"></div>
+      <div id="productBadge"></div>
+      <h1 class="product-title" id="productTitle"></h1>
+      <div class="product-price" id="productPrice"></div>
+      <p class="product-desc" id="productDesc"></p>
+      <div class="product-meta" id="productMeta"></div>
+      <div class="product-actions">
+        <button class="btn btn-primary btn-glow" onclick="showProductOrderForm()">
+          <i class="fa-solid fa-paper-plane"></i> Заказать расчёт
+        </button>
+        <button class="btn btn-outline" onclick="addToCart(currentProductId)">
+          <i class="fa-solid fa-cart-plus"></i> В корзину
+        </button>
+        <button class="product-fav-btn" onclick="toggleFavorite(currentProductId)" id="productFavBtn" title="В избранное">
+          <i class="fa-regular fa-heart"></i>
+        </button>
+        <button class="product-comp-btn" onclick="toggleComparison(currentProductId)" title="Сравнить">
+          <i class="fa-solid fa-scale-balanced"></i>
+        </button>
+      </div>
+      <div class="cart-order-form" id="productOrderForm">
+        <div class="form-row">
+          <input type="text" id="prodOrderName" placeholder="Ваше имя" required>
+          <input type="tel" id="prodOrderPhone" placeholder="+7 (___) ___-__-__" required>
+        </div>
+        <button class="btn btn-primary" onclick="submitProductPageOrder()" style="width:100%; padding:14px;">Отправить заявку</button>
+      </div>
+      <div class="cart-order-success" id="productOrderSuccess">
+        <div style="text-align:center;padding:16px 0;color:var(--accent);font-weight:600;">✓ Заявка отправлена!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="related-section">
+    <h2>Похожие товары</h2>
+    <div class="catalog-grid" id="relatedGrid"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-mark">ТТ</div>
+        <div class="logo-text">
+          <span class="logo-name">ТТмебель</span>
+          <span class="logo-sub">Мебель для дома</span>
+        </div>
+      </div>
+      <p>Качественная мебель для дома с доставкой и установкой. Работаем для вашего комфорта с 2018 года.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Каталог</h4>
+      <a href="catalog.html#living">Гостиная</a>
+      <a href="catalog.html#bedroom">Спальня</a>
+      <a href="catalog.html#kitchen">Кухня</a>
+      <a href="catalog.html#hallway">Прихожая</a>
+      <a href="catalog.html#kids">Детская</a>
+    </div>
+    <div class="footer-col">
+      <h4>Информация</h4>
+      <a href="about.html">О компании</a>
+      <a href="delivery.html">Доставка и оплата</a>
+      <a href="reviews.html">Отзывы</a>
+      <a href="contacts.html">Контакты</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ссылки</h4>
+      <a href="admin.html">Управление каталогом</a>
+      <a href="tel:+79991234567" class="footer-phone">+7 (999) 123-45-67</a>
+      <a href="mailto:info@ttmebel.ru" class="footer-email">info@ttmebel.ru</a>
+      <a href="#" class="footer-address">г. Краснодар, ул. Кореновская, 5, стр. 1</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 ТТмебель. Все права защищены.</p>
+  </div>
+</footer>
+
+<button class="scroll-top" aria-label="Наверх">↑</button>
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="index.html"><i class="fa-solid fa-house"></i><span>Главная</span></a>
+    <a href="catalog.html"><i class="fa-solid fa-table-cells-large"></i><span>Каталог</span></a>
+    <a href="contacts.html"><i class="fa-solid fa-phone"></i><span>Связь</span></a>
+    <a href="about.html"><i class="fa-solid fa-circle-info"></i><span>О нас</span></a>
+  </div>
+</nav>
+<div class="messengers-float">
+  <a href="https://wa.me/79991234567" class="messenger-btn whatsapp" data-tooltip="WhatsApp" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+  <a href="https://t.me/+79991234567" class="messenger-btn telegram" data-tooltip="Telegram" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i></a>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
+<script>
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(0,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/0" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+<script src="js/notify.js"></script>
+<script src="js/analytics.js"></script>
+<script src="js/main.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/catalog.js"></script>
+<script>
+const CATEGORIES = { living: 'Гостиная', bedroom: 'Спальня', kitchen: 'Кухня', hallway: 'Прихожая', kids: 'Детская', budget: 'Бюджетная' };
+let currentProductId = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get('id'));
+  if (!id) { window.location.href = 'catalog.html'; return; }
+
+  currentProductId = id;
+
+  loadCatalogProducts().then(products => {
+    const p = products.find(x => x.id === id);
+    if (!p) { document.querySelector('.product-page').innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>Товар не найден</p><a href="catalog.html" class="btn btn-primary">Вернуться в каталог</a></div>'; return; }
+
+    document.title = p.name + ' — ТТмебель';
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute('content', p.description || p.name + ' — купить в ТТмебель');
+
+    const catLabel = CATEGORIES[p.category] || p.category;
+    document.getElementById('bcCategory').textContent = catLabel;
+    document.getElementById('productCategory').textContent = catLabel;
+    document.getElementById('productTitle').textContent = p.name;
+    document.getElementById('productPrice').innerHTML = p.price + ' <small>' + (p.priceUnit || '') + '</small>';
+    document.getElementById('productDesc').textContent = p.description || '';
+
+    if (p.badge) {
+      document.getElementById('productBadge').innerHTML = '<span class="product-badge">' + escapeHtml(p.badge) + '</span>';
+    }
+
+    const allImgs = getAllImages(p);
+    currentProductImages = allImgs;
+
+    if (allImgs.length > 0) {
+      document.getElementById('productMainImg').innerHTML = '<img src="' + escapeHtml(allImgs[0]) + '" alt="' + escapeHtml(p.name) + '">';
+      if (allImgs.length > 1) {
+        document.getElementById('productThumbs').innerHTML = allImgs.map((img, i) =>
+          '<div class="product-thumb ' + (i === 0 ? 'active' : '') + '" onclick="switchProductPageImage(' + i + ')"><img src="' + escapeHtml(img) + '" alt=""></div>'
+        ).join('');
+      }
+    }
+
+    document.getElementById('productMeta').innerHTML = `
+      <div class="product-meta-item"><span>Артикул</span><b>TT-${String(p.id).padStart(4, '0')}</b></div>
+      <div class="product-meta-item"><span>Категория</span><b>${escapeHtml(catLabel)}</b></div>
+      <div class="product-meta-item"><span>Наличие</span><b>В наличии</b></div>
+      <div class="product-meta-item"><span>Гарантия</span><b>2 года</b></div>
+    `;
+
+    const related = products.filter(x => x.category === p.category && x.id !== p.id).slice(0, 3);
+    if (related.length > 0) {
+      document.getElementById('relatedGrid').innerHTML = related.map(renderCatalogCard).join('');
+    }
+
+    if (typeof isFavorite === 'function' && isFavorite(p.id)) {
+      document.getElementById('productFavBtn').querySelector('i').className = 'fa-solid fa-heart';
+    }
+  });
+});
+
+function switchProductPageImage(index) {
+  if (index < 0 || index >= currentProductImages.length) return;
+  const mainImg = document.querySelector('#productMainImg img');
+  if (mainImg) mainImg.src = currentProductImages[index];
+  document.querySelectorAll('.product-thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+}
+
+function showProductOrderForm() {
+  document.getElementById('productOrderForm').classList.add('show');
+}
+
+function submitProductPageOrder() {
+  const name = document.getElementById('prodOrderName').value.trim();
+  const phone = document.getElementById('prodOrderPhone').value.trim();
+  if (!name || !phone) { showToast('Заполните имя и телефон'); return; }
+
+  loadCatalogProducts().then(products => {
+    const p = products.find(x => x.id === currentProductId);
+    submitForm('order', { name, phone, product: p ? p.name : 'Товар #' + currentProductId }).then(() => {
+      document.getElementById('productOrderForm').classList.remove('show');
+      document.getElementById('productOrderSuccess').classList.add('show');
+      showToast('Заявка отправлена!');
+    }).catch(() => {
+      document.getElementById('productOrderForm').classList.remove('show');
+      document.getElementById('productOrderSuccess').classList.add('show');
+      showToast('Заявка принята!');
+    });
+  });
+}
+</script>
+</body>
+</html>

@@ -39,12 +39,12 @@ function renderCatalogCard(p) {
   const imgCount = allImgs.length > 1 ? `<span class="card-img-count">📷 ${allImgs.length}</span>` : '';
 
   return `
-    <div class="catalog-card" data-category="${p.category}" onclick="openProductModal(${p.id})" style="cursor:pointer;">
+    <div class="catalog-card" data-category="${p.category}" onclick="window.location.href='product.html?id=${p.id}'" style="cursor:pointer;">
       <div class="catalog-card-image" style="background:linear-gradient(135deg,#2a2a2a,#3d3d3d);">
         ${imageContent}
         ${badgeHtml}
         ${imgCount}
-        <button class="quick-view-btn" onclick="event.stopPropagation(); openProductModal(${p.id})" title="Быстрый просмотр">
+        <button class="quick-view-btn" onclick="event.stopPropagation(); window.location.href='product.html?id=${p.id}'" title="Подробнее">
           <i class="fa-solid fa-eye"></i>
         </button>
       </div>

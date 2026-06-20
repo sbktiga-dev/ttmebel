@@ -127,6 +127,17 @@
     <button class="filter-btn" data-filter="budget">Бюджетная</button>
   </div>
 
+  <div class="price-filter" id="priceFilter">
+    <div class="price-filter-inner">
+      <span class="price-filter-label">Цена:</span>
+      <input type="number" id="priceMin" placeholder="от" min="0" step="1000">
+      <span class="price-filter-sep">—</span>
+      <input type="number" id="priceMax" placeholder="до" min="0" step="1000">
+      <button class="price-filter-btn" onclick="applyPriceFilter()">OK</button>
+      <button class="price-filter-reset" onclick="resetPriceFilter()">✕</button>
+    </div>
+  </div>
+
   <div class="catalog-grid" id="catalogGrid">
     <div class="skeleton skeleton-card"></div>
     <div class="skeleton skeleton-card"></div>
@@ -235,9 +246,16 @@ let activeFilter = 'all';
 let searchQuery = '';
 let sortType = 'default';
 let showCount = 9;
+let priceMin = 0;
+let priceMax = Infinity;
 const ITEMS_PER_PAGE = 9;
 
 document.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.replace('#', '');
+  if (hash && ['living', 'bedroom', 'kitchen', 'hallway', 'kids', 'budget'].includes(hash)) {
+    activeFilter = hash;
+  }
+
   loadCatalogProducts().then(products => {
     allProducts = products;
     renderFiltered();
@@ -245,6 +263,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearch();
     initSort();
     initLoadMore();
+  });
+
+  window.addEventListener('hashchange', () => {
+    const h = window.location.hash.replace('#', '');
+    if (h && ['living', 'bedroom', 'kitchen', 'hallway', 'kids', 'budget'].includes(h)) {
+      activeFilter = h;
+    } else {
+      activeFilter = 'all';
+    }
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.filter === activeFilter);
+    });
+    renderFiltered();
   });
 });
 
@@ -261,6 +292,13 @@ function renderFiltered(reset = true) {
   if (searchQuery) {
     const q = searchQuery.toLowerCase();
     filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
+  }
+
+  if (priceMin > 0 || priceMax < Infinity) {
+    filtered = filtered.filter(p => {
+      const num = parseInt((p.price || '').replace(/[^\d]/g, '')) || 0;
+      return num >= priceMin && num <= priceMax;
+    });
   }
 
   filtered = sortProducts(filtered);
@@ -358,6 +396,11 @@ function initFilters() {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeFilter = btn.dataset.filter;
+      if (activeFilter === 'all') {
+        history.pushState(null, '', 'catalog.html');
+      } else {
+        history.pushState(null, '', 'catalog.html#' + activeFilter);
+      }
       renderFiltered();
     });
   });
@@ -373,6 +416,22 @@ function initSearch() {
       renderFiltered();
     }, 200);
   });
+}
+
+function applyPriceFilter() {
+  const minVal = document.getElementById('priceMin').value;
+  const maxVal = document.getElementById('priceMax').value;
+  priceMin = parseInt(minVal) || 0;
+  priceMax = parseInt(maxVal) || Infinity;
+  renderFiltered();
+}
+
+function resetPriceFilter() {
+  document.getElementById('priceMin').value = '';
+  document.getElementById('priceMax').value = '';
+  priceMin = 0;
+  priceMax = Infinity;
+  renderFiltered();
 }
 </script>
 </body>
