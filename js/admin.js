@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!checkAdminAuth()) return;
   loadProducts();
   loadSiteData();
-  renderStats();
   setupDragDrop();
 });
 
@@ -42,8 +41,13 @@ function logoutAdmin() {
 
 function loadProducts() {
   const saved = localStorage.getItem('ttmebel_products');
-  if (saved) { products = JSON.parse(saved); }
-  else { loadProductsFromJSON(); }
+  if (saved) {
+    products = JSON.parse(saved);
+    renderStats();
+    filterTable();
+  } else {
+    loadProductsFromJSON();
+  }
 }
 
 function loadProductsFromJSON() {
