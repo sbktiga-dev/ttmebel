@@ -3298,6 +3298,7 @@ img {
 .price-dropdown {
   position: relative;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .price-dropdown-btn {
@@ -3323,27 +3324,40 @@ img {
   color: var(--accent);
 }
 
-.price-dropdown-btn i {
-  font-size: 0.75rem;
+.price-dropdown-btn i.fa-chevron-down {
+  font-size: 0.7rem;
   transition: transform 0.2s;
 }
 
-.price-dropdown-btn.active i {
+.price-dropdown-btn.active i.fa-chevron-down {
   transform: rotate(180deg);
 }
 
 .price-dropdown-panel {
   display: none;
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   left: 0;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  z-index: 50;
-  min-width: 240px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  z-index: 200;
+  min-width: 220px;
+}
+
+.price-dropdown-panel::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  width: 12px;
+  height: 12px;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  transform: rotate(45deg);
 }
 
 .price-dropdown-panel.open {
@@ -3379,12 +3393,12 @@ img {
 .price-dropdown-actions {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .price-dropdown-actions button {
   flex: 1;
-  padding: 8px;
+  padding: 9px 8px;
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
