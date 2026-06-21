@@ -177,6 +177,7 @@ function initContactForm() {
 
   contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (!checkRateLimit('contact_form', 60000)) return;
     const formData = new FormData(contactForm);
     const data = Object.fromEntries(formData.entries());
 
@@ -252,6 +253,20 @@ function showToast(message, duration = 3000) {
   }, duration);
 }
 
+function checkRateLimit(type, cooldownMs) {
+  cooldownMs = cooldownMs || 60000;
+  const key = 'ttmebel_ratelimit_' + type;
+  const last = parseInt(localStorage.getItem(key) || '0');
+  const now = Date.now();
+  if (now - last < cooldownMs) {
+    const wait = Math.ceil((cooldownMs - (now - last)) / 1000);
+    showToast(`Подождите ${wait} сек. перед повторной отправкой`);
+    return false;
+  }
+  localStorage.setItem(key, String(now));
+  return true;
+}
+
 function debounce(fn, delay) {
   let timer;
   return (...args) => {
@@ -272,6 +287,7 @@ function closeCallbackModal() {
 
 function submitCallback(e) {
   e.preventDefault();
+  if (!checkRateLimit('callback', 60000)) return;
   const name = document.getElementById('callbackName').value;
   const phone = document.getElementById('callbackPhone').value;
 

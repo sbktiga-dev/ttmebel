@@ -38,6 +38,13 @@ function renderCatalogCard(p) {
   const descHtml = p.description ? `<p class="catalog-card-desc">${escapeHtml(p.description)}</p>` : '';
   const imgCount = allImgs.length > 1 ? `<span class="card-img-count">📷 ${allImgs.length}</span>` : '';
 
+  const reviews = JSON.parse(localStorage.getItem('ttmebel_reviews_' + p.id) || '[]');
+  let ratingHtml = '';
+  if (reviews.length > 0) {
+    const avg = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+    ratingHtml = `<div style="color:var(--accent);font-size:0.85rem;margin-top:8px;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5 - Math.round(avg))} <span style="color:var(--text-muted);font-size:0.8rem;">(${reviews.length})</span></div>`;
+  }
+
   return `
     <div class="catalog-card" data-category="${p.category}" onclick="window.location.href='product.html?id=${p.id}'" style="cursor:pointer;">
       <div class="catalog-card-image" style="background:linear-gradient(135deg,#2a2a2a,#3d3d3d);">
@@ -53,6 +60,7 @@ function renderCatalogCard(p) {
         <h3>${escapeHtml(p.name)}</h3>
         ${descHtml}
         <div class="price">${p.price} <small>${p.priceUnit || ''}</small></div>
+        ${ratingHtml}
       </div>
     </div>
   `;
@@ -211,6 +219,7 @@ function prevProductImage() {
 
 function submitProductOrder(e, productName) {
   e.preventDefault();
+  if (!checkRateLimit('product_order', 30000)) return;
   const name = document.getElementById('pmOrderName').value.trim();
   const phone = document.getElementById('pmOrderPhone').value.trim();
   if (!name || !phone) return;
