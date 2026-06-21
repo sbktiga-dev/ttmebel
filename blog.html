@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Советы — ТТмебель</title>
+  <meta name="description" content="Полезные советы по выбору и уходу за мебелью от экспертов ТТмебель.">
+  <link rel="canonical" href="https://ttmebel.ru/blog.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Советы — ТТмебель">
+  <meta property="og:description" content="Полезные советы по выбору и уходу за мебелью.">
+  <meta property="og:url" content="https://ttmebel.ru/blog.html">
+  <meta property="og:image" content="https://ttmebel.ru/images/og-preview.jpg">
+  <meta property="og:locale" content="ru_RU">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=2.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%238b6faf'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='%231a1a1a'%3EТТ%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8b6faf">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <style>
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto; }
+    .blog-card { background: rgba(37,37,37,0.6); border: 1px solid rgba(58,58,58,0.5); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.3s; cursor: pointer; }
+    .blog-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+    .blog-card-img { height: 200px; background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated)); display: flex; align-items: center; justify-content: center; font-size: 3rem; overflow: hidden; }
+    .blog-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .blog-card-body { padding: 20px; }
+    .blog-card-tag { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; background: rgba(139,111,175,0.15); color: var(--accent); margin-bottom: 10px; }
+    .blog-card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+    .blog-card-excerpt { color: var(--text-light); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .blog-card-meta { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.8rem; }
+    .blog-empty { text-align: center; padding: 80px 20px; color: var(--text-light); grid-column: 1/-1; }
+    .blog-empty .icon { font-size: 4rem; margin-bottom: 16px; opacity: 0.3; }
+    @media (max-width: 1024px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .blog-grid { grid-template-columns: 1fr; } .blog-card-img { height: 180px; } }
+  </style>
+</head>
+<body data-page="blog">
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">ТТ</div>
+      <div class="logo-text">
+        <span class="logo-name">ТТмебель</span>
+        <span class="logo-sub">Мебель для дома</span>
+      </div>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="index.html">Главная</a>
+      <a href="catalog.html">Каталог</a>
+      <a href="about.html">О нас</a>
+      <a href="delivery.html">Доставка</a>
+      <a href="reviews.html">Отзывы</a>
+      <a href="contacts.html">Контакты</a>
+    </nav>
+    <div class="header-right">
+      <a href="tel:+79991234567" class="header-phone" data-phone-href data-phone>+7 (999) 123-45-67</a>
+      <a href="admin.html" class="btn-admin">Админ</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="index.html"><span itemprop="name">Главная</span></a>
+      <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span itemprop="name" class="current">Советы</span>
+      <meta itemprop="position" content="2">
+    </li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <h1>Советы и статьи</h1>
+  <p>Полезные рекомендации по выбору и уходу за мебелью</p>
+</div>
+
+<section class="section">
+  <div class="blog-grid" id="blogGrid">
+    <div class="blog-empty">
+      <div class="icon">📝</div>
+      <p>Статьи скоро появятся</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-mark">ТТ</div>
+        <div class="logo-text">
+          <span class="logo-name">ТТмебель</span>
+          <span class="logo-sub">Мебель для дома</span>
+        </div>
+      </div>
+      <p>Качественная мебель для дома с доставкой и установкой. Работаем для вашего комфорта с 2018 года.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Каталог</h4>
+      <a href="catalog.html#living">Гостиная</a>
+      <a href="catalog.html#bedroom">Спальня</a>
+      <a href="catalog.html#kitchen">Кухня</a>
+      <a href="catalog.html#hallway">Прихожая</a>
+      <a href="catalog.html#kids">Детская</a>
+    </div>
+    <div class="footer-col">
+      <h4>Информация</h4>
+      <a href="about.html">О компании</a>
+      <a href="delivery.html">Доставка и оплата</a>
+      <a href="reviews.html">Отзывы</a>
+      <a href="contacts.html">Контакты</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ссылки</h4>
+      <a href="admin.html">Управление каталогом</a>
+      <a href="tel:+79991234567" class="footer-phone">+7 (999) 123-45-67</a>
+      <a href="mailto:info@ttmebel.ru" class="footer-email">info@ttmebel.ru</a>
+      <a href="#" class="footer-address">г. Краснодар, ул. Кореновская, 5, стр. 1</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 ТТмебель. Все права защищены.</p>
+  </div>
+</footer>
+
+<button class="scroll-top" aria-label="Наверх">↑</button>
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="index.html"><i class="fa-solid fa-house"></i><span>Главная</span></a>
+    <a href="catalog.html"><i class="fa-solid fa-table-cells-large"></i><span>Каталог</span></a>
+    <a href="contacts.html"><i class="fa-solid fa-phone"></i><span>Связь</span></a>
+    <a href="about.html"><i class="fa-solid fa-circle-info"></i><span>О нас</span></a>
+  </div>
+</nav>
+
+<script>
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').catch(() => {}); }
+</script>
+<script>
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(0,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/0" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+<script src="js/notify.js"></script>
+<script src="js/analytics.js"></script>
+<script src="js/main.js"></script>
+<script src="js/chat.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const siteData = JSON.parse(localStorage.getItem('ttmebel_site') || '{}');
+  const articles = siteData.blog || [];
+  const grid = document.getElementById('blogGrid');
+
+  if (!articles.length) {
+    grid.innerHTML = '<div class="blog-empty"><div class="icon">📝</div><p>Статьи скоро появятся</p></div>';
+    return;
+  }
+
+  const TAG_COLORS = {
+    'Советы': '#4ecdc4', 'Дизайн': '#e74c3c', 'Уход': '#f39c12', 'Тренды': '#9b59b6', 'Новости': '#3498db'
+  };
+
+  grid.innerHTML = articles.map((a, i) => `
+    <div class="blog-card" onclick="openArticle(${i})">
+      <div class="blog-card-img">
+        ${a.image ? `<img src="${escapeHtml(a.image)}" alt="${escapeHtml(a.title)}" loading="lazy">` : '📝'}
+      </div>
+      <div class="blog-card-body">
+        <span class="blog-card-tag" style="background:${TAG_COLORS[a.tag] ? TAG_COLORS[a.tag] + '22' : 'rgba(139,111,175,0.15)'};color:${TAG_COLORS[a.tag] || 'var(--accent)'};">${escapeHtml(a.tag || 'Статья')}</span>
+        <div class="blog-card-title">${escapeHtml(a.title)}</div>
+        <div class="blog-card-excerpt">${escapeHtml(a.excerpt || a.content?.substring(0, 150) || '')}</div>
+        <div class="blog-card-meta">
+          <span>${a.date ? new Date(a.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}</span>
+          <span>${a.readTime || '3 мин'} чтения</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+});
+
+function openArticle(index) {
+  const siteData = JSON.parse(localStorage.getItem('ttmebel_site') || '{}');
+  const articles = siteData.blog || [];
+  const a = articles[index];
+  if (!a) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'product-modal-overlay open';
+  overlay.id = 'articleModal';
+  overlay.innerHTML = `
+    <div class="product-modal" style="max-width:800px;">
+      <button class="pm-close" onclick="document.getElementById('articleModal').remove(); document.body.style.overflow='';">✕</button>
+      <div style="padding:32px;max-height:80vh;overflow-y:auto;">
+        ${a.image ? `<img src="${escapeHtml(a.image)}" alt="${escapeHtml(a.title)}" style="width:100%;border-radius:12px;margin-bottom:20px;max-height:300px;object-fit:cover;">` : ''}
+        <span class="blog-card-tag" style="margin-bottom:12px;display:inline-block;">${escapeHtml(a.tag || 'Статья')}</span>
+        <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:8px;">${escapeHtml(a.title)}</h2>
+        <div style="color:var(--text-muted);font-size:0.85rem;margin-bottom:20px;">
+          ${a.date ? new Date(a.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} · ${a.readTime || '3 мин'} чтения
+        </div>
+        <div style="color:var(--text-light);font-size:1rem;line-height:1.8;white-space:pre-wrap;">${escapeHtml(a.content || '')}</div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) { overlay.remove(); document.body.style.overflow = ''; } });
+}
+</script>
+</body>
+</html>

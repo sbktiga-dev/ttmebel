@@ -358,6 +358,8 @@ function fillAllTabs() {
 
   renderGalleryEditor(siteData.gallery || []);
 
+  renderBlogEditor(siteData.blog || []);
+
   if (document.getElementById('ctPhone')) document.getElementById('ctPhone').value = ct.phone || '';
   if (document.getElementById('ctPhoneHours')) document.getElementById('ctPhoneHours').value = ct.phoneHours || '';
   if (document.getElementById('ctEmail')) document.getElementById('ctEmail').value = ct.email || '';
@@ -407,6 +409,8 @@ function collectAllTabs() {
   siteData.reviews = collectReviewsEditor();
 
   siteData.gallery = collectGalleryEditor();
+
+  siteData.blog = collectBlogEditor();
 
   siteData.contacts = {
     phone: document.getElementById('ctPhone')?.value || '',
@@ -810,6 +814,108 @@ function autoSaveSiteData() {
     }
     localStorage.setItem('ttmebel_site', json);
   } catch (e) {}
+}
+
+// ========== BLOG EDITOR ==========
+
+function renderBlogEditor(articles) {
+  const el = document.getElementById('blogEditor');
+  if (!el) return;
+  if (!articles || !articles.length) {
+    el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);">Нет статей. Добавьте первую статью.</div>';
+    return;
+  }
+  el.innerHTML = articles.map((a, i) => `
+    <div class="editor-row">
+      <div class="row-header">
+        <span>Статья ${i + 1}</span>
+        <button class="remove-row" onclick="removeBlogArticle(${i})">✕</button>
+      </div>
+      <div class="row-fields">
+        <input type="text" value="${escapeHtml(a.title || '')}" placeholder="Заголовок статьи" onchange="updateBlogArticle(${i}, 'title', this.value)">
+        <div style="display:flex;gap:8px;">
+          <select onchange="updateBlogArticle(${i}, 'tag', this.value)" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;font-family:inherit;background:var(--bg-card);color:var(--text);">
+            <option value="Советы" ${a.tag === 'Советы' ? 'selected' : ''}>Советы</option>
+            <option value="Дизайн" ${a.tag === 'Дизайн' ? 'selected' : ''}>Дизайн</option>
+            <option value="Уход" ${a.tag === 'Уход' ? 'selected' : ''}>Уход</option>
+            <option value="Тренды" ${a.tag === 'Тренды' ? 'selected' : ''}>Тренды</option>
+            <option value="Новости" ${a.tag === 'Новости' ? 'selected' : ''}>Новости</option>
+          </select>
+          <input type="text" value="${escapeHtml(a.readTime || '3 мин')}" placeholder="Время чтения" style="width:100px;" onchange="updateBlogArticle(${i}, 'readTime', this.value)">
+        </div>
+        <textarea rows="2" placeholder="Краткое описание (для превью)" onchange="updateBlogArticle(${i}, 'excerpt', this.value)">${escapeHtml(a.excerpt || '')}</textarea>
+        <textarea rows="5" placeholder="Полный текст статьи" onchange="updateBlogArticle(${i}, 'content', this.value)">${escapeHtml(a.content || '')}</textarea>
+        <div class="img-upload-inline" style="min-height:80px;" onclick="triggerBlogImageUpload(${i})">
+          <img id="blogImg${i}" src="${a.image || ''}" style="${a.image ? '' : 'display:none;'}" alt="">
+          <div class="img-upload-placeholder" id="blogPlaceholder${i}" style="${a.image ? 'display:none;' : ''}">📷 Фото к статье</div>
+          <input type="file" accept="image/*" style="display:none;" onchange="handleBlogImageUpload(event, ${i})">
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function collectBlogEditor() {
+  return siteData.blog || [];
+}
+
+function addBlogArticle() {
+  if (!siteData.blog) siteData.blog = [];
+  siteData.blog.push({ title: '', tag: 'Советы', excerpt: '', content: '', image: '', readTime: '3 мин', date: new Date().toISOString() });
+  renderBlogEditor(siteData.blog);
+}
+
+function removeBlogArticle(index) {
+  if (!confirm('Удалить статью?')) return;
+  siteData.blog.splice(index, 1);
+  renderBlogEditor(siteData.blog);
+}
+
+function updateBlogArticle(index, field, value) {
+  if (!siteData.blog || !siteData.blog[index]) return;
+  siteData.blog[index][field] = value;
+  autoSaveSiteData();
+}
+
+function triggerBlogImageUpload(index) {
+  const row = document.querySelectorAll('.editor-row')[index];
+  if (row) {
+    const input = row.querySelector('input[type="file"]');
+    if (input) input.click();
+  }
+}
+
+function handleBlogImageUpload(event, index) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxW = 800;
+      let w = img.width, h = img.height;
+      if (w > maxW) { h = h * maxW / w; w = maxW; }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let dataUrl;
+      try {
+        const webp = canvas.toDataURL('image/webp', 0.8);
+        dataUrl = (webp && webp.length < canvas.toDataURL('image/jpeg', 0.8).length) ? webp : canvas.toDataURL('image/jpeg', 0.8);
+      } catch(e) { dataUrl = canvas.toDataURL('image/jpeg', 0.8); }
+      siteData.blog[index].image = dataUrl;
+      const preview = document.getElementById('blogImg' + index);
+      const placeholder = document.getElementById('blogPlaceholder' + index);
+      if (preview) { preview.src = dataUrl; preview.style.display = 'block'; }
+      if (placeholder) placeholder.style.display = 'none';
+      autoSaveSiteData();
+      showToast('Фото добавлено к статье');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
 }
 
 // ========== MODAL EVENTS ==========
