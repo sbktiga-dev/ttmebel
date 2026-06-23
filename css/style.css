@@ -4228,8 +4228,14 @@ img {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   overflow: hidden;
+}
+
+.header, .hero, .section, .footer, .bottom-nav, .gallery-strip-section,
+.messengers-float, .callback-btn, .scroll-top, .chat-widget-btn {
+  position: relative;
+  z-index: 2;
 }
 
 .bg-decor {
