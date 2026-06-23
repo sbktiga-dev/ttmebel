@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -17,11 +17,14 @@
 
   <div class="admin-header">
     <h1>Панель управления</h1>
-    <div class="actions">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <span id="storageInfo" style="font-size:0.8rem;color:var(--text-light);"></span>
+      <div class="actions">
       <button class="btn btn-outline btn-sm" onclick="exportAll()">📥 Экспорт всех данных</button>
       <button class="btn btn-outline btn-sm" onclick="document.getElementById('importAllInput').click()">📤 Импорт данных</button>
       <input type="file" id="importAllInput" class="hidden-input" accept=".json" onchange="importAll(event)">
       <button class="btn btn-outline btn-sm" onclick="logoutAdmin()" style="margin-left: 8px; border-color: #e74c3c; color: #e74c3c;">🚪 Выйти</button>
+      </div>
     </div>
   </div>
 

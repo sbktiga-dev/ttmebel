@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
   loadSiteData();
   setupDragDrop();
+  showStorageUsage();
 });
 
 function checkAdminAuth() {
@@ -35,6 +36,28 @@ function logoutAdmin() {
   localStorage.removeItem('ttmebel_admin');
   localStorage.removeItem('ttmebel_auth');
   window.location.href = 'index.html';
+}
+
+function getStorageUsage() {
+  let total = 0;
+  for (let key in localStorage) {
+    if (localStorage.hasOwnProperty(key) && key.startsWith('ttmebel_')) {
+      total += localStorage.getItem(key).length * 2;
+    }
+  }
+  return total;
+}
+
+function showStorageUsage() {
+  const used = getStorageUsage();
+  const maxBytes = 5 * 1024 * 1024;
+  const pct = Math.round((used / maxBytes) * 100);
+  const mb = (used / (1024 * 1024)).toFixed(1);
+  const el = document.getElementById('storageInfo');
+  if (el) {
+    el.textContent = `Хранилище: ${mb} МБ / 5 МБ (${pct}%)`;
+    el.style.color = pct > 80 ? '#e74c3c' : pct > 60 ? '#f39c12' : 'var(--text-light)';
+  }
 }
 
 // ========== PRODUCTS ==========
@@ -56,7 +79,18 @@ function loadProductsFromJSON() {
   }).catch(() => { products = []; renderStats(); filterTable(); });
 }
 
-function saveProducts() { localStorage.setItem('ttmebel_products', JSON.stringify(products)); }
+function saveProducts() {
+  try {
+    localStorage.setItem('ttmebel_products', JSON.stringify(products));
+    showStorageUsage();
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      alert('Недостаточно места в хранилище браузера для товаров. Уменьшите размер фото или удалите лишние товары.');
+    } else {
+      alert('Ошибка сохранения товаров: ' + e.message);
+    }
+  }
+}
 
 function renderStats() {
   const total = products.length;
@@ -186,7 +220,7 @@ function processFile(file) {
   if (file.size > 10 * 1024 * 1024) { alert('Максимум 10 МБ'); return; }
   const reader = new FileReader();
   reader.onload = e => {
-    compressImage(e.target.result, 1200, 0.75).then(compressed => {
+    compressImage(e.target.result, 900, 0.7).then(compressed => {
       currentImageData = compressed;
       document.getElementById('uploadPreview').src = compressed;
       document.getElementById('uploadPreview').style.display = 'block';
@@ -213,7 +247,7 @@ function handleMultiFileSelect(e) {
     if (file.size > 10 * 1024 * 1024) return;
     const reader = new FileReader();
     reader.onload = ev => {
-      compressImage(ev.target.result, 1200, 0.75).then(compressed => {
+      compressImage(ev.target.result, 900, 0.7).then(compressed => {
         currentMultiImages.push(compressed);
         renderMultiPreviews();
       });
@@ -243,7 +277,7 @@ function handleInlineUpload(e, previewId, section) {
 
   const reader = new FileReader();
   reader.onload = ev => {
-    compressImage(ev.target.result, 800, 0.7).then(compressed => {
+    compressImage(ev.target.result, 700, 0.65).then(compressed => {
       document.getElementById(previewId + 'Preview').src = compressed;
       document.getElementById(previewId + 'Preview').style.display = 'block';
       document.getElementById(previewId + 'Placeholder').style.display = 'none';
@@ -259,13 +293,14 @@ function compressImage(dataUrl, maxWidth, quality) {
   return new Promise(resolve => {
     const img = new Image();
     img.onload = () => {
-      if (img.width <= maxWidth) { resolve(dataUrl); return; }
       const canvas = document.createElement('canvas');
-      const ratio = maxWidth / img.width;
-      canvas.width = maxWidth;
-      canvas.height = img.height * ratio;
+      let w = img.width;
+      let h = img.height;
+      if (w > maxWidth) { h = h * maxWidth / w; w = maxWidth; }
+      canvas.width = w;
+      canvas.height = h;
       const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, w, h);
       try {
         const webp = canvas.toDataURL('image/webp', quality);
         if (webp && webp.length < dataUrl.length) { resolve(webp); return; }
@@ -320,6 +355,7 @@ function saveSiteData() {
       return;
     }
     localStorage.setItem('ttmebel_site', json);
+    showStorageUsage();
     alert('Настройки сохранены!');
   } catch (e) {
     if (e.name === 'QuotaExceededError') {
@@ -517,7 +553,7 @@ function handleTeamPhoto(i, e) {
   if (!file || file.size > 10 * 1024 * 1024) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    compressImage(ev.target.result, 400, 0.7).then(compressed => {
+    compressImage(ev.target.result, 300, 0.65).then(compressed => {
       siteData.about.team[i].image = compressed;
       renderTeamEditor(siteData.about.team);
     });
@@ -634,7 +670,7 @@ function handleReviewPhoto(i, e) {
   if (!file || file.size > 10 * 1024 * 1024) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    compressImage(ev.target.result, 400, 0.7).then(compressed => {
+    compressImage(ev.target.result, 300, 0.65).then(compressed => {
       siteData.reviews[i].avatar = compressed;
       renderReviewsEditor(siteData.reviews);
     });
@@ -771,7 +807,7 @@ function handleGalleryUpload(event) {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const maxW = 1200;
+        const maxW = 800;
         let w = img.width;
         let h = img.height;
         if (w > maxW) { h = h * maxW / w; w = maxW; }
@@ -780,9 +816,9 @@ function handleGalleryUpload(event) {
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
         let dataUrl;
         try {
-          const webp = canvas.toDataURL('image/webp', 0.8);
-          dataUrl = (webp && webp.length < canvas.toDataURL('image/jpeg', 0.8).length) ? webp : canvas.toDataURL('image/jpeg', 0.8);
-        } catch(e) { dataUrl = canvas.toDataURL('image/jpeg', 0.8); }
+          const webp = canvas.toDataURL('image/webp', 0.75);
+          dataUrl = (webp && webp.length < canvas.toDataURL('image/jpeg', 0.75).length) ? webp : canvas.toDataURL('image/jpeg', 0.75);
+        } catch(e) { dataUrl = canvas.toDataURL('image/jpeg', 0.75); }
         siteData.gallery.push(dataUrl);
         processed++;
         if (processed === files.length) {
@@ -809,11 +845,16 @@ function autoSaveSiteData() {
   try {
     const json = JSON.stringify(siteData);
     if (json.length > 4.5 * 1024 * 1024) {
-      showToast('Данные слишком большие!');
+      showToast('Данные слишком больные! Уменьшите размер фото.');
       return;
     }
     localStorage.setItem('ttmebel_site', json);
-  } catch (e) {}
+    showStorageUsage();
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      showToast('Недостаточно места! Уменьшите размер фото или удалите лишние.');
+    }
+  }
 }
 
 // ========== BLOG EDITOR ==========
@@ -893,7 +934,7 @@ function handleBlogImageUpload(event, index) {
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      const maxW = 800;
+      const maxW = 600;
       let w = img.width, h = img.height;
       if (w > maxW) { h = h * maxW / w; w = maxW; }
       canvas.width = w;
@@ -901,9 +942,9 @@ function handleBlogImageUpload(event, index) {
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       let dataUrl;
       try {
-        const webp = canvas.toDataURL('image/webp', 0.8);
-        dataUrl = (webp && webp.length < canvas.toDataURL('image/jpeg', 0.8).length) ? webp : canvas.toDataURL('image/jpeg', 0.8);
-      } catch(e) { dataUrl = canvas.toDataURL('image/jpeg', 0.8); }
+        const webp = canvas.toDataURL('image/webp', 0.7);
+        dataUrl = (webp && webp.length < canvas.toDataURL('image/jpeg', 0.7).length) ? webp : canvas.toDataURL('image/jpeg', 0.7);
+      } catch(e) { dataUrl = canvas.toDataURL('image/jpeg', 0.7); }
       siteData.blog[index].image = dataUrl;
       const preview = document.getElementById('blogImg' + index);
       const placeholder = document.getElementById('blogPlaceholder' + index);
