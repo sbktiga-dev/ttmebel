@@ -14,7 +14,80 @@ document.addEventListener('DOMContentLoaded', () => {
   initPageTransitions();
   initAdminVisibility();
   initUserHeader();
+  initBgDecorations();
 });
+
+function initBgDecorations() {
+  const page = document.body.dataset.page;
+  if (!page || page === 'admin' || page === 'login' || page === 'register' || page === 'profile') return;
+
+  const container = document.createElement('div');
+  container.className = 'bg-decorations';
+  container.setAttribute('aria-hidden', 'true');
+
+  const configs = {
+    home: [
+      { cls: 'bg-decor--circle bg-decor--float1', w: 300, h: 300, top: '8%', left: '5%' },
+      { cls: 'bg-decor--ring bg-decor--float2', w: 180, h: 180, top: '15%', right: '8%' },
+      { cls: 'bg-decor--glow bg-decor--pulse', w: 400, h: 400, top: '40%', left: '60%' },
+      { cls: 'bg-decor--dot bg-decor--float3', w: 6, h: 6, top: '25%', left: '30%' },
+      { cls: 'bg-decor--dot bg-decor--float1', w: 4, h: 4, top: '55%', right: '20%' },
+      { cls: 'bg-decor--dot bg-decor--float2', w: 5, h: 5, top: '70%', left: '15%' },
+      { cls: 'bg-decor--line bg-decor--drift', w: 250, h: 1, top: '35%', left: '10%', rotate: 15 },
+      { cls: 'bg-decor--line bg-decor--drift', w: 180, h: 1, top: '65%', right: '5%', rotate: -20, delay: '5s' },
+      { cls: 'bg-decor--circle bg-decor--float2', w: 120, h: 120, bottom: '10%', left: '8%' },
+      { cls: 'bg-decor--ring bg-decor--float3', w: 90, h: 90, bottom: '20%', right: '12%' },
+    ],
+    catalog: [
+      { cls: 'bg-decor--glow bg-decor--pulse', w: 350, h: 350, top: '5%', right: '10%' },
+      { cls: 'bg-decor--circle bg-decor--float1', w: 200, h: 200, top: '30%', left: '3%' },
+      { cls: 'bg-decor--dot bg-decor--float3', w: 5, h: 5, top: '20%', left: '40%' },
+      { cls: 'bg-decor--dot bg-decor--float1', w: 4, h: 4, top: '60%', right: '30%' },
+      { cls: 'bg-decor--line bg-decor--drift', w: 200, h: 1, top: '45%', left: '20%', rotate: 10 },
+    ],
+    about: [
+      { cls: 'bg-decor--circle bg-decor--float2', w: 250, h: 250, top: '10%', right: '5%' },
+      { cls: 'bg-decor--ring bg-decor--float1', w: 150, h: 150, top: '50%', left: '5%' },
+      { cls: 'bg-decor--glow bg-decor--pulse', w: 300, h: 300, bottom: '10%', right: '20%' },
+      { cls: 'bg-decor--dot bg-decor--float3', w: 5, h: 5, top: '35%', left: '25%' },
+    ],
+    delivery: [
+      { cls: 'bg-decor--ring bg-decor--float1', w: 200, h: 200, top: '8%', left: '10%' },
+      { cls: 'bg-decor--glow bg-decor--pulse', w: 350, h: 350, top: '50%', right: '5%' },
+      { cls: 'bg-decor--dot bg-decor--float2', w: 5, h: 5, top: '25%', right: '25%' },
+      { cls: 'bg-decor--line bg-decor--drift', w: 220, h: 1, top: '70%', left: '15%', rotate: -8 },
+    ],
+    reviews: [
+      { cls: 'bg-decor--circle bg-decor--float3', w: 220, h: 220, top: '12%', right: '8%' },
+      { cls: 'bg-decor--ring bg-decor--float2', w: 130, h: 130, bottom: '15%', left: '10%' },
+      { cls: 'bg-decor--glow bg-decor--pulse', w: 300, h: 300, top: '40%', left: '50%' },
+      { cls: 'bg-decor--dot bg-decor--float1', w: 4, h: 4, top: '30%', left: '20%' },
+    ],
+    contacts: [
+      { cls: 'bg-decor--circle bg-decor--float1', w: 280, h: 280, top: '5%', left: '5%' },
+      { cls: 'bg-decor--ring bg-decor--float3', w: 160, h: 160, top: '40%', right: '10%' },
+      { cls: 'bg-decor--dot bg-decor--float2', w: 5, h: 5, top: '20%', right: '30%' },
+      { cls: 'bg-decor--line bg-decor--drift', w: 200, h: 1, top: '60%', left: '25%', rotate: 12 },
+    ],
+  };
+
+  const elements = configs[page] || configs.home;
+  elements.forEach(cfg => {
+    const el = document.createElement('div');
+    el.className = 'bg-decor ' + cfg.cls;
+    el.style.width = cfg.w + 'px';
+    el.style.height = cfg.h + 'px';
+    if (cfg.top) el.style.top = cfg.top;
+    if (cfg.bottom) el.style.bottom = cfg.bottom;
+    if (cfg.left) el.style.left = cfg.left;
+    if (cfg.right) el.style.right = cfg.right;
+    if (cfg.rotate) el.style.transform = 'rotate(' + cfg.rotate + 'deg)';
+    if (cfg.delay) el.style.animationDelay = '1.5s, ' + cfg.delay;
+    container.appendChild(el);
+  });
+
+  document.body.prepend(container);
+}
 
 function initBurger() {
   const burger = document.getElementById('burger');
