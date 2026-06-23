@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Товар — ТТмебель</title>
   <meta name="description" content="">
+  <meta property="og:type" content="product">
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:image" content="">
+  <meta property="og:url" content="">
+  <meta property="og:site_name" content="ТТмебель">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+  <script type="application/ld+json" id="productSchema"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=3.1">
@@ -259,6 +271,54 @@ document.addEventListener('DOMContentLoaded', () => {
     document.title = p.name + ' — ТТмебель';
     const desc = document.querySelector('meta[name="description"]');
     if (desc) desc.setAttribute('content', p.description || p.name + ' — купить в ТТмебель');
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    const ogImage = document.querySelector('meta[property="og:image"]');
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    const twTitle = document.querySelector('meta[name="twitter:title"]');
+    const twDesc = document.querySelector('meta[name="twitter:description"]');
+    const twImage = document.querySelector('meta[name="twitter:image"]');
+    const baseUrl = window.location.origin + window.location.pathname;
+    const pageUrl = baseUrl + '?id=' + p.id;
+    const img = (p.images && p.images[0]) || p.image || '';
+    const imgUrl = img ? (img.startsWith('http') ? img : window.location.origin + '/' + img) : '';
+    if (ogTitle) ogTitle.setAttribute('content', p.name + ' — ТТмебель');
+    if (ogDesc) ogDesc.setAttribute('content', p.description || p.name);
+    if (ogImage && imgUrl) ogImage.setAttribute('content', imgUrl);
+    if (ogUrl) ogUrl.setAttribute('content', pageUrl);
+    if (twTitle) twTitle.setAttribute('content', p.name + ' — ТТмебель');
+    if (twDesc) twDesc.setAttribute('content', p.description || p.name);
+    if (twImage && imgUrl) twImage.setAttribute('content', imgUrl);
+
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": p.name,
+      "description": p.description || '',
+      "brand": { "@type": "Brand", "name": "ТТмебель" },
+      "sku": "TT-" + String(p.id).padStart(4, '0'),
+      "url": pageUrl,
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "RUB",
+        "price": p.price ? p.price.replace(/[^\d]/g, '') : '',
+        "availability": "https://schema.org/InStock",
+        "seller": { "@type": "Organization", "name": "ТТмебель" }
+      }
+    };
+    if (imgUrl) schemaData.image = imgUrl;
+    const reviews = getProductReviews(p.id);
+    if (reviews.length > 0) {
+      const avg = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+      schemaData.aggregateRating = {
+        "@type": "AggregateRating",
+        "ratingValue": avg.toFixed(1),
+        "reviewCount": String(reviews.length)
+      };
+    }
+    const schemaEl = document.getElementById('productSchema');
+    if (schemaEl) schemaEl.textContent = JSON.stringify(schemaData);
 
     const catLabel = CATEGORIES[p.category] || p.category;
     document.getElementById('bcCategory').textContent = catLabel;
