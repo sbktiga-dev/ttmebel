@@ -73,7 +73,7 @@ function renderHomePage(d) {
   if (hp.heroImage) {
     const heroImg = document.getElementById('heroImageArea');
     if (heroImg) {
-      heroImg.innerHTML = `<img src="${escapeHtml(hp.heroImage)}" alt="" class="site-rendered-img" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg);">`;
+      heroImg.innerHTML = `<img src="${escapeHtml(hp.heroImage)}" alt="" class="site-rendered-img" loading="lazy">`;
     }
   }
   if (hp.popularTitle) setText('popularTitle', hp.popularTitle);
@@ -97,8 +97,8 @@ function renderAboutPage(d) {
       if (svgPlaceholder) svgPlaceholder.style.display = 'none';
       const img = document.createElement('img');
       img.src = ab.companyImage;
-      img.className = 'site-rendered-img';
-      img.style.cssText = 'width:100%;height:auto;max-height:400px;object-fit:cover;border-radius:20px;';
+      img.className = 'site-rendered-img site-rendered-img-about';
+      img.style.cssText = 'width:100%;height:auto;';
       imgEl.appendChild(img);
     }
   }
@@ -116,16 +116,16 @@ function renderAboutPage(d) {
   if (ab.team && ab.team.length) {
     const el = document.getElementById('aboutTeam');
     if (el) el.innerHTML = ab.team.map(m => `
-      <div class="review-card" style="text-align:center;">
-        <div class="review-avatar" style="width:80px;height:80px;font-size:2rem;margin:0 auto 16px;overflow:hidden;">
+      <div class="review-card team-card">
+        <div class="review-avatar team-avatar">
           ${m.image
             ? `<img src="${escapeHtml(m.image)}" class="site-rendered-img" loading="lazy" style="width:100%;height:100%;object-fit:cover;" alt="${escapeHtml(m.name)}">`
             : `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><circle cx="20" cy="20" r="20" fill="#c8956c"/><circle cx="20" cy="14" r="8" fill="#3d3d3d"/><path d="M8 36c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="#3d3d3d"/></svg>`
           }
         </div>
         <h3 style="margin-bottom:4px;">${escapeHtml(m.name)}</h3>
-        <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:8px;">${escapeHtml(m.role)}</p>
-        <p style="color:var(--text-light);font-size:0.85rem;">${escapeHtml(m.bio)}</p>
+        <p class="team-role">${escapeHtml(m.role)}</p>
+        <p class="team-bio">${escapeHtml(m.bio)}</p>
       </div>
     `).join('');
   }
@@ -177,14 +177,6 @@ function renderDeliveryPage(d) {
           <div class="faq-answer"><p>${escapeHtml(f.answer)}</p></div>
         </div>
       `).join('');
-      el.querySelectorAll('.faq-question').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const item = btn.closest('.faq-item');
-          const wasOpen = item.classList.contains('open');
-          document.querySelectorAll('.faq-item.open').forEach(x => x.classList.remove('open'));
-          if (!wasOpen) item.classList.add('open');
-        });
-      });
     }
   }
 }

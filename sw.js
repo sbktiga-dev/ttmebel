@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ttmebel-v3';
+const CACHE_NAME = 'ttmebel-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -15,6 +15,8 @@ const STATIC_ASSETS = [
   '/js/site-render.js',
   '/js/notify.js',
   '/js/cart.js',
+  '/js/chat.js',
+  '/js/analytics.js',
   '/data/products.json',
   '/data/site.json',
   '/data/config.json',

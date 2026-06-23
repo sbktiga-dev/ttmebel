@@ -25,6 +25,10 @@
 - [ ] "Вы смотрели" — улучшить рекомендации
 
 ## Технический долг
+- ✅ Безопасный JS минификатор в build.js (комментарии + whitespace, без ломания строк)
+- ✅ Убраны inline-стили из JS → CSS-классы
+- ✅ MutationObserver оптимизирован (не следит за всем body)
+- ✅ Service Worker кэширует все JS файлы
 - [ ] Перейти на Vite/esbuild вместо custom build.js
 - [ ] TypeScript для main JS файлов
 - [ ] Unit-тесты для cart.js, catalog.js

@@ -11,59 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initFaq();
   initTooltips();
-  initSeamlessBg();
   initPageTransitions();
   initAdminVisibility();
   initUserHeader();
 });
-
-function initSeamlessBg() {
-  const body = document.body;
-  const style = getComputedStyle(body);
-  const bgImage = style.backgroundImage;
-  if (!bgImage || bgImage === 'none') return;
-
-  const urlMatch = bgImage.match(/url\(["']?(.+?)["']?\)/);
-  if (!urlMatch) return;
-
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    const w = img.width;
-    const h = img.height;
-
-    canvas.width = w;
-    canvas.height = h * 2;
-    const ctx = canvas.getContext('2d');
-
-    ctx.drawImage(img, 0, 0, w, h);
-
-    ctx.save();
-    ctx.translate(0, h * 2);
-    ctx.scale(1, -1);
-    ctx.drawImage(img, 0, 0, w, h);
-    ctx.restore();
-
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-    body.style.backgroundImage = `url(${dataUrl})`;
-    body.style.backgroundSize = 'auto 200vh';
-    body.style.backgroundRepeat = 'repeat-y';
-  };
-  img.src = urlMatch[1];
-
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        const scrollY = window.scrollY;
-        body.style.backgroundPositionY = `${-scrollY * 0.3}px`;
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-}
 
 function initBurger() {
   const burger = document.getElementById('burger');
@@ -126,7 +77,14 @@ function initObserver() {
 
   observeElements();
 
-  new MutationObserver(observeElements).observe(document.body, { childList: true, subtree: true });
+  const targets = document.querySelectorAll('.catalog-grid, .reviews-grid, .advantages-grid');
+  if (targets.length) {
+    targets.forEach(target => {
+      new MutationObserver(observeElements).observe(target, { childList: true, subtree: true });
+    });
+  } else {
+    new MutationObserver(observeElements).observe(document.body, { childList: true, subtree: true });
+  }
 }
 
 function initPhoneMask() {
@@ -348,10 +306,10 @@ function initUserHeader() {
   if (user) {
     userBtn.href = 'profile.html';
     userBtn.innerHTML = `<i class="fa-solid fa-user" style="margin-right:6px;"></i>${user.name.split(' ')[0]}`;
-    userBtn.style.cssText = 'padding:6px 14px;font-size:0.85rem;border-radius:8px;background:rgba(139,111,175,0.15);color:var(--accent);border:1px solid rgba(139,111,175,0.3);text-decoration:none;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;white-space:nowrap;';
+    userBtn.className = 'header-user-btn header-user-btn-active';
   } else {
     userBtn.href = 'register.html';
     userBtn.innerHTML = `<i class="fa-solid fa-user-plus" style="margin-right:6px;"></i>Войти`;
-    userBtn.style.cssText = 'padding:6px 14px;font-size:0.85rem;border-radius:8px;background:transparent;color:var(--text-light);border:1px solid var(--border);text-decoration:none;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;white-space:nowrap;';
+    userBtn.className = 'header-user-btn header-user-btn-inactive';
   }
 }

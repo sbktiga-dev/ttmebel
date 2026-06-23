@@ -91,3 +91,16 @@
 - Hover-эффекты на карточках
 - Кастомный скроллбар
 - prefers-reduced-motion для accessibility
+
+---
+
+## История изменений
+
+### 2026-06-23 — Оптимизация и исправление багов
+- **Исправлен backtick баг** во всех 7 HTML файлах (`` `n `` перед `<script src="js/chat.js">`)
+- **Service Worker**: добавлены `chat.js` и `analytics.js` в `STATIC_ASSETS`, кэш v3→v4
+- **Убрано дублирование FAQ**: обработчики из `site-render.js` удалены (уже есть в `main.js:initFaq`)
+- **Inline-стили → CSS-классы**: `catalog-rating`, `catalog-card-image-placeholder`, `comparison-table`, `team-card`, `site-rendered-img`, `header-user-btn`
+- **Удалена `initSeamlessBg`**: canvas+dataURL не нужны для radial-gradient фонов
+- **MutationObserver**: сужен scope с `document.body` на `.catalog-grid, .reviews-grid, .advantages-grid`
+- **build.js**: JS минификатор заменён на безопасный (только комментарии + trailing whitespace)

@@ -20,11 +20,8 @@ function minifyCSS(content) {
 function minifyJS(content) {
   return content
     .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/\/\/.*$/gm, '')
-    .replace(/\s+/g, ' ')
-    .replace(/\s*([{}();,=+\-<>!&|?:])\s*/g, '$1')
-    .replace(/;}/g, '}')
-    .replace(/\n/g, '')
+    .replace(/[ \t]+$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
 

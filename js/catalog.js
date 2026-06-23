@@ -32,7 +32,7 @@ function renderCatalogCard(p) {
   const hasImage = allImgs.length > 0;
   const imageContent = hasImage
     ? `<img src="${escapeHtml(allImgs[0])}" alt="${escapeHtml(p.name)}" loading="lazy" onclick="event.stopPropagation(); openLightbox(${JSON.stringify(allImgs).replace(/"/g, '&quot;')}, 0)">`
-    : getPlaceholder(p.category);
+    : `<div style="background:linear-gradient(135deg,#2a2a2a,#3d3d3d);">${getPlaceholder(p.category)}</div>`;
 
   const badgeHtml = p.badge ? `<span class="badge">${escapeHtml(p.badge)}</span>` : '';
   const descHtml = p.description ? `<p class="catalog-card-desc">${escapeHtml(p.description)}</p>` : '';
@@ -42,12 +42,12 @@ function renderCatalogCard(p) {
   let ratingHtml = '';
   if (reviews.length > 0) {
     const avg = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
-    ratingHtml = `<div style="color:var(--accent);font-size:0.85rem;margin-top:8px;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5 - Math.round(avg))} <span style="color:var(--text-muted);font-size:0.8rem;">(${reviews.length})</span></div>`;
+    ratingHtml = `<div class="catalog-rating">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5 - Math.round(avg))} <span class="catalog-rating-count">(${reviews.length})</span></div>`;
   }
 
   return `
-    <div class="catalog-card" data-category="${p.category}" onclick="window.location.href='product.html?id=${p.id}'" style="cursor:pointer;">
-      <div class="catalog-card-image" style="background:linear-gradient(135deg,#2a2a2a,#3d3d3d);">
+    <div class="catalog-card" data-category="${p.category}" onclick="window.location.href='product.html?id=${p.id}'">
+      <div class="catalog-card-image catalog-card-image-placeholder">
         ${imageContent}
         ${badgeHtml}
         ${imgCount}
@@ -448,35 +448,35 @@ function openComparison() {
         <button class="pm-close" onclick="document.getElementById('comparisonModal').remove(); document.body.style.overflow='';">✕</button>
         <div style="padding:24px;overflow-x:auto;">
           <h2 style="margin-bottom:16px;font-size:1.3rem;">Сравнение товаров</h2>
-          <table style="width:100%;border-collapse:collapse;min-width:500px;">
+          <table class="comparison-table">
             <thead>
               <tr>
-                <th style="text-align:left;padding:12px;border-bottom:2px solid var(--border);color:var(--text-light);font-size:0.85rem;width:120px;">Параметр</th>
-                ${items.map(i => `<th style="text-align:center;padding:12px;border-bottom:2px solid var(--border);">
+                <th>Параметр</th>
+                ${items.map(i => `<th>
                   <div style="font-weight:700;font-size:0.95rem;">${escapeHtml(i.name)}</div>
                 </th>`).join('')}
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:0.85rem;">Категория</td>
-                ${items.map(i => `<td style="text-align:center;padding:10px 12px;border-bottom:1px solid var(--border);">${escapeHtml(catLabel)}</td>`).join('')}
+                <td>Категория</td>
+                ${items.map(i => `<td>${escapeHtml(catLabel)}</td>`).join('')}
               </tr>
               <tr>
-                <td style="padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:0.85rem;">Цена</td>
-                ${items.map(i => `<td style="text-align:center;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--accent);font-weight:700;">${escapeHtml(i.price)}</td>`).join('')}
+                <td>Цена</td>
+                ${items.map(i => `<td class="comparison-price">${escapeHtml(i.price)}</td>`).join('')}
               </tr>
               <tr>
-                <td style="padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:0.85rem;">Бейдж</td>
-                ${items.map(i => `<td style="text-align:center;padding:10px 12px;border-bottom:1px solid var(--border);">${i.badge ? escapeHtml(i.badge) : '—'}</td>`).join('')}
+                <td>Бейдж</td>
+                ${items.map(i => `<td>${i.badge ? escapeHtml(i.badge) : '—'}</td>`).join('')}
               </tr>
               <tr>
-                <td style="padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:0.85rem;">Артикул</td>
-                ${items.map(i => `<td style="text-align:center;padding:10px 12px;border-bottom:1px solid var(--border);">TT-${String(i.id).padStart(4, '0')}</td>`).join('')}
+                <td>Артикул</td>
+                ${items.map(i => `<td>TT-${String(i.id).padStart(4, '0')}</td>`).join('')}
               </tr>
               <tr>
-                <td style="padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text-light);font-size:0.85rem;">Описание</td>
-                ${items.map(i => `<td style="text-align:center;padding:10px 12px;border-bottom:1px solid var(--border);font-size:0.85rem;">${escapeHtml(i.description || '—')}</td>`).join('')}
+                <td>Описание</td>
+                ${items.map(i => `<td class="comparison-desc">${escapeHtml(i.description || '—')}</td>`).join('')}
               </tr>
             </tbody>
           </table>
