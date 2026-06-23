@@ -7,17 +7,15 @@ function loadNotifyConfig() {
       const parsed = JSON.parse(adminConfig);
       if (parsed.config) {
         notifyConfig = {
-          telegram: {
-            enabled: parsed.config.telegramEnabled !== false,
-            botToken: parsed.config.telegramToken || '',
-            chatId: parsed.config.telegramChatId || ''
-          },
           whatsapp: {
             enabled: !!parsed.config.whatsappPhone,
             phone: parsed.config.whatsappPhone || ''
           },
-          emailjs: { enabled: false },
-          notifications: { telegramEnabled: parsed.config.telegramEnabled !== false, saveToStorage: true }
+          max: {
+            enabled: !!parsed.config.maxLink,
+            link: parsed.config.maxLink || ''
+          },
+          emailjs: { enabled: false }
         };
         return Promise.resolve(notifyConfig);
       }
@@ -28,7 +26,7 @@ function loadNotifyConfig() {
     .then(r => r.json())
     .then(data => { notifyConfig = data; return data; })
     .catch(() => {
-      notifyConfig = { telegram: { enabled: false }, whatsapp: { enabled: false }, emailjs: { enabled: false } };
+      notifyConfig = { whatsapp: { enabled: false }, max: { enabled: false }, emailjs: { enabled: false } };
       return notifyConfig;
     });
 }
@@ -36,29 +34,6 @@ function loadNotifyConfig() {
 function getNotifyConfig() {
   if (notifyConfig) return Promise.resolve(notifyConfig);
   return loadNotifyConfig();
-}
-
-function sendTelegram(text) {
-  return getNotifyConfig().then(cfg => {
-    if (!cfg.telegram || !cfg.telegram.enabled || !cfg.telegram.botToken || cfg.telegram.botToken.includes('ВСТАВЬ')) {
-      console.log('Telegram not configured, skipping');
-      return Promise.resolve();
-    }
-
-    const url = `https://api.telegram.org/bot${cfg.telegram.botToken}/sendMessage`;
-    return fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: cfg.telegram.chatId,
-        text: text,
-        parse_mode: 'HTML'
-      })
-    }).then(r => r.json()).then(data => {
-      if (!data.ok) console.error('Telegram error:', data);
-      return data;
-    });
-  });
 }
 
 function sendEmailJS(data) {
@@ -84,7 +59,7 @@ function saveFormToStorage(type, data) {
   localStorage.setItem(key, JSON.stringify(forms));
 }
 
-function formatTelegramMessage(data, type) {
+function formatFormMessage(data, type) {
   const now = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
   const categoryLabels = {
     living: 'Гостиная', bedroom: 'Спальня', kitchen: 'Кухня',
@@ -95,25 +70,25 @@ function formatTelegramMessage(data, type) {
   let msg = '';
 
   if (type === 'contact') {
-    msg = `📬 <b>Новая заявка с сайта ТТмебель</b>\n\n`;
-    msg += `👤 <b>Имя:</b> ${data.name || '—'}\n`;
-    msg += `📞 <b>Телефон:</b> ${data.phone || '—'}\n`;
-    if (data.email) msg += `📧 <b>Email:</b> ${data.email}\n`;
-    if (data.interest) msg += `🛋 <b>Интересует:</b> ${categoryLabels[data.interest] || data.interest}\n`;
-    msg += `💬 <b>Сообщение:</b>\n${data.message || '—'}\n\n`;
+    msg = `📬 Новая заявка с сайта ТТмебель\n\n`;
+    msg += `👤 Имя: ${data.name || '—'}\n`;
+    msg += `📞 Телефон: ${data.phone || '—'}\n`;
+    if (data.email) msg += `📧 Email: ${data.email}\n`;
+    if (data.interest) msg += `🛋 Интересует: ${categoryLabels[data.interest] || data.interest}\n`;
+    msg += `💬 Сообщение:\n${data.message || '—'}\n\n`;
     msg += `🕐 ${now}`;
   } else if (type === 'order') {
-    msg = `🛒 <b>Заказ расчёта с сайта ТТмебель</b>\n\n`;
-    msg += `👤 <b>Имя:</b> ${data.name || '—'}\n`;
-    msg += `📞 <b>Телефон:</b> ${data.phone || '—'}\n`;
-    if (data.product) msg += `📦 <b>Товар:</b> ${data.product}\n`;
-    if (data.message) msg += `💬 <b>Комментарий:</b> ${data.message}\n\n`;
+    msg = `🛒 Заказ расчёта с сайта ТТмебель\n\n`;
+    msg += `👤 Имя: ${data.name || '—'}\n`;
+    msg += `📞 Телефон: ${data.phone || '—'}\n`;
+    if (data.product) msg += `📦 Товар: ${data.product}\n`;
+    if (data.message) msg += `💬 Комментарий: ${data.message}\n\n`;
     msg += `🕐 ${now}`;
   } else if (type === 'callback') {
-    msg = `📲 <b>Заказ обратного звонка</b>\n\n`;
-    msg += `👤 <b>Имя:</b> ${data.name || '—'}\n`;
-    msg += `📞 <b>Телефон:</b> ${data.phone || '—'}\n`;
-    if (data.time) msg += `⏰ <b>Удобное время:</b> ${data.time}\n`;
+    msg = `📲 Заказ обратного звонка\n\n`;
+    msg += `👤 Имя: ${data.name || '—'}\n`;
+    msg += `📞 Телефон: ${data.phone || '—'}\n`;
+    if (data.time) msg += `⏰ Удобное время: ${data.time}\n`;
     msg += `\n🕐 ${now}`;
   }
 
@@ -129,22 +104,27 @@ function openWhatsApp(text) {
   });
 }
 
+function openMax() {
+  return getNotifyConfig().then(cfg => {
+    const link = (cfg.max && cfg.max.link) || 'https://vk.me/max';
+    window.open(link, '_blank');
+  });
+}
+
 function submitForm(type, data, options = {}) {
-  const telegramMsg = formatTelegramMessage(data, type);
   const promises = [];
 
   if (options.saveToStorage !== false) {
     saveFormToStorage(type, data);
   }
 
-  promises.push(sendTelegram(telegramMsg));
-
   if (options.emailjs) {
     promises.push(sendEmailJS(data));
   }
 
+  if (promises.length === 0) return Promise.resolve({});
+
   return Promise.all(promises).then(results => ({
-    telegram: results[0],
-    emailjs: results[1] || null
+    emailjs: results[0] || null
   }));
 }

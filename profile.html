@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -682,10 +682,10 @@ function submitCartOrder() {
   if (cart.length === 0) return;
 
   loadCatalogProducts().then(products => {
-    const msg = formatCartTelegramMessage(cart, products, name, phone);
+    const msg = formatCartMessage(cart, products, name, phone);
     saveFormToStorage('cart_order', { name, phone, items: cart });
 
-    sendTelegram(msg).then(() => {
+    submitForm("cart_order", { name, phone, items: cart }).then(() => {
       document.getElementById('cartOrderForm').classList.remove('show');
       document.getElementById('cartOrderSuccess').classList.add('show');
       clearCart();

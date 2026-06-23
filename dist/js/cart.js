@@ -82,12 +82,12 @@ function getCartTotal(cartItems, products) {
   return total;
 }
 
-function formatCartTelegramMessage(cartItems, products, userName, userPhone) {
+function formatCartMessage(cartItems, products, userName, userPhone) {
   const now = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
-  let msg = `🛒 <b>Заявка на расчёт с сайта ТТмебель</b>\n\n`;
-  msg += `👤 <b>Клиент:</b> ${userName || '—'}\n`;
-  msg += `📞 <b>Телефон:</b> ${userPhone || '—'}\n\n`;
-  msg += `<b>Товары:</b>\n`;
+  let msg = `🛒 Заявка на расчёт с сайта ТТмебель\n\n`;
+  msg += `👤 Клиент: ${userName || '—'}\n`;
+  msg += `📞 Телефон: ${userPhone || '—'}\n\n`;
+  msg += `Товары:\n`;
 
   let total = 0;
   cartItems.forEach((ci, i) => {
@@ -100,8 +100,8 @@ function formatCartTelegramMessage(cartItems, products, userName, userPhone) {
     }
   });
 
-  msg += `\n💰 <b>Итого:</b> ~${total.toLocaleString('ru-RU')} ₽\n`;
-  msg += `📦 <b>Позиций:</b> ${cartItems.length}\n`;
+  msg += `\n💰 Итого: ~${total.toLocaleString('ru-RU')} ₽\n`;
+  msg += `📦 Позиций: ${cartItems.length}\n`;
   msg += `\n🕐 ${now}`;
 
   return msg;

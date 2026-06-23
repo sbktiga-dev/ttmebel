@@ -4,8 +4,7 @@ function initChatWidget() {
   const cfg = JSON.parse(localStorage.getItem('ttmebel_site') || '{}');
   const config = cfg.config || {};
   const waPhone = config.whatsappPhone || '79991234567';
-  const tgToken = config.telegramToken || '';
-  const tgChatId = config.telegramChatId || '';
+  const maxLink = config.maxLink || 'https://vk.me/max';
 
   const widget = document.createElement('div');
   widget.id = 'chatWidget';
@@ -43,10 +42,9 @@ function initChatWidget() {
           <a href="https://wa.me/${waPhone}?text=${encodeURIComponent('Здравствуйте! Хочу узнать о мебели.')}" class="chat-channel-btn whatsapp" target="_blank" rel="noopener">
             <i class="fa-brands fa-whatsapp"></i> WhatsApp
           </a>
-          ${tgToken && !tgToken.includes('ВСТАВЬ') ? `
-          <a href="https://t.me/+${waPhone}" class="chat-channel-btn telegram" target="_blank" rel="noopener">
-            <i class="fa-brands fa-telegram"></i> Telegram
-          </a>` : ''}
+          <a href="${maxLink}" class="chat-channel-btn max" target="_blank" rel="noopener">
+            <i class="fa-brands fa-vk"></i> Макс
+          </a>
           <a href="tel:+${waPhone}" class="chat-channel-btn phone">
             <i class="fa-solid fa-phone"></i> Позвонить
           </a>
@@ -108,23 +106,10 @@ function sendChatMessage() {
   input.value = '';
 
   setTimeout(() => {
-    addChatMessage('Спасибо! Ваше сообщение принято. Наш менеджер ответит вам в ближайшее время. Для быстрого ответа напишите нам в WhatsApp или Telegram.', 'bot');
+    addChatMessage('Спасибо! Ваше сообщение принято. Наш менеджер ответит вам в ближайшее время. Для быстрого ответа напишите нам в WhatsApp или Макс.', 'bot');
   }, 1000);
 
-  const cfg = JSON.parse(localStorage.getItem('ttmebel_site') || '{}');
-  const config = cfg.config || {};
-  if (config.telegramToken && !config.telegramToken.includes('ВСТАВЬ') && config.telegramChatId) {
-    const url = `https://api.telegram.org/bot${config.telegramToken}/sendMessage`;
-    fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: config.telegramChatId,
-        text: `💬 <b>Чат с сайта ТТмебель</b>\n\nСообщение: ${text}\n\n🕐 ${new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}`,
-        parse_mode: 'HTML'
-      })
-    }).catch(() => {});
-  }
+  saveFormToStorage('chat', { text });
 }
 
 function addChatMessage(text, type) {
@@ -139,9 +124,5 @@ function addChatMessage(text, type) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (!document.querySelector('.bottom-nav')) {
-    initChatWidget();
-  } else {
-    initChatWidget();
-  }
+  initChatWidget();
 });

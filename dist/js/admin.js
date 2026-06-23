@@ -372,10 +372,10 @@ function fillAllTabs() {
   if (document.getElementById('ftAbout')) document.getElementById('ftAbout').value = ft.about || '';
   if (document.getElementById('ftCopyright')) document.getElementById('ftCopyright').value = ft.copyright || '';
 
-  if (document.getElementById('cfgTgToken')) document.getElementById('cfgTgToken').value = cfg.telegramToken || '';
-  if (document.getElementById('cfgTgChat')) document.getElementById('cfgTgChat').value = cfg.telegramChatId || '';
+  if (document.getElementById('cfgMaxLink')) document.getElementById('cfgMaxLink').value = cfg.maxLink || '';
+
   if (document.getElementById('cfgWaPhone')) document.getElementById('cfgWaPhone').value = cfg.whatsappPhone || '';
-  if (document.getElementById('cfgTgEnabled')) document.getElementById('cfgTgEnabled').value = cfg.telegramEnabled !== false ? 'true' : 'false';
+
 }
 
 function collectAllTabs() {
@@ -429,10 +429,10 @@ function collectAllTabs() {
   };
 
   siteData.config = {
-    telegramToken: document.getElementById('cfgTgToken')?.value || '',
-    telegramChatId: document.getElementById('cfgTgChat')?.value || '',
+    maxLink: document.getElementById('cfgMaxLink')?.value || '',
+
     whatsappPhone: document.getElementById('cfgWaPhone')?.value || '',
-    telegramEnabled: document.getElementById('cfgTgEnabled')?.value === 'true'
+
   };
 }
 
