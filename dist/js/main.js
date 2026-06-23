@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPageTransitions();
   initAdminVisibility();
   initUserHeader();
+  initPushNotifications();
 });
 
 function initBurger() {

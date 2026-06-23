@@ -17,6 +17,7 @@ const STATIC_ASSETS = [
   '/js/cart.js',
   '/js/chat.js',
   '/js/analytics.js',
+  '/js/push.js',
   '/data/products.json',
   '/data/site.json',
   '/data/config.json',

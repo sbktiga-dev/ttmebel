@@ -4,7 +4,7 @@
   "description": "Качественная мебель для дома с доставкой и установкой. Готовая мебель и изготовление под заказ.",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#1a1a1a",
+  "background_color": "#3a3a3a",
   "theme_color": "#8b6faf",
   "orientation": "any",
   "icons": [
