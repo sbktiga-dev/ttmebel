@@ -74,8 +74,8 @@ function showLocalNotification(title, body, icon) {
 
   const notif = new Notification(title, {
     body: body,
-    icon: icon || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" rx="20" fill="%238b6faf"/%3E%3Ctext x="50" y="68" font-size="50" font-weight="bold" text-anchor="middle" fill="%231a1a1a"%3EТТ%3C/text%3E%3C/svg%3E',
-    badge: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"%3E%3Crect width="96" height="96" rx="20" fill="%238b6faf"/%3E%3C/svg%3E',
+    icon: icon || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" rx="20" fill="%23c8a84e"/%3E%3Ctext x="50" y="68" font-size="50" font-weight="bold" text-anchor="middle" fill="%231a1a1a"%3EТТ%3C/text%3E%3C/svg%3E',
+    badge: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"%3E%3Crect width="96" height="96" rx="20" fill="%23c8a84e"/%3E%3C/svg%3E',
     tag: 'ttmebel-local',
     requireInteraction: false
   });

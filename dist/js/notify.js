@@ -59,58 +59,6 @@ function saveFormToStorage(type, data) {
   localStorage.setItem(key, JSON.stringify(forms));
 }
 
-function formatFormMessage(data, type) {
-  const now = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
-  const categoryLabels = {
-    living: 'Гостиная', bedroom: 'Спальня', kitchen: 'Кухня',
-    hallway: 'Прихожая', kids: 'Детская', budget: 'Бюджетная',
-    custom: 'Мебель под заказ', other: 'Другое'
-  };
-
-  let msg = '';
-
-  if (type === 'contact') {
-    msg = `📬 Новая заявка с сайта ТТмебель\n\n`;
-    msg += `👤 Имя: ${data.name || '—'}\n`;
-    msg += `📞 Телефон: ${data.phone || '—'}\n`;
-    if (data.email) msg += `📧 Email: ${data.email}\n`;
-    if (data.interest) msg += `🛋 Интересует: ${categoryLabels[data.interest] || data.interest}\n`;
-    msg += `💬 Сообщение:\n${data.message || '—'}\n\n`;
-    msg += `🕐 ${now}`;
-  } else if (type === 'order') {
-    msg = `🛒 Заказ расчёта с сайта ТТмебель\n\n`;
-    msg += `👤 Имя: ${data.name || '—'}\n`;
-    msg += `📞 Телефон: ${data.phone || '—'}\n`;
-    if (data.product) msg += `📦 Товар: ${data.product}\n`;
-    if (data.message) msg += `💬 Комментарий: ${data.message}\n\n`;
-    msg += `🕐 ${now}`;
-  } else if (type === 'callback') {
-    msg = `📲 Заказ обратного звонка\n\n`;
-    msg += `👤 Имя: ${data.name || '—'}\n`;
-    msg += `📞 Телефон: ${data.phone || '—'}\n`;
-    if (data.time) msg += `⏰ Удобное время: ${data.time}\n`;
-    msg += `\n🕐 ${now}`;
-  }
-
-  return msg;
-}
-
-function openWhatsApp(text) {
-  return getNotifyConfig().then(cfg => {
-    if (!cfg.whatsapp || !cfg.whatsapp.enabled || !cfg.whatsapp.phone) return;
-    const phone = cfg.whatsapp.phone.replace(/\D/g, '');
-    const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-  });
-}
-
-function openMax() {
-  return getNotifyConfig().then(cfg => {
-    const link = (cfg.max && cfg.max.link) || 'https://vk.me/max';
-    window.open(link, '_blank');
-  });
-}
-
 function submitForm(type, data, options = {}) {
   const promises = [];
 

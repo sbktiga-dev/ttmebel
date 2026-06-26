@@ -164,7 +164,7 @@ function openProductModal(id) {
             <button class="fav-btn" onclick="toggleFavorite(${p.id})" id="favBtn_${p.id}" title="В избранное">
               <i class="fa-${isFavorite(p.id) ? 'solid' : 'regular'} fa-heart"></i>
             </button>
-            <button class="fav-btn" onclick="toggleComparison(${p.id})" style="background:rgba(139,111,175,0.1);border-color:rgba(139,111,175,0.3);color:var(--accent);" title="Сравнить">
+            <button class="fav-btn" onclick="toggleComparison(${p.id})" style="background:rgba(200,168,78,0.1);border-color:rgba(200,168,78,0.3);color:var(--accent);" title="Сравнить">
               <i class="fa-solid fa-scale-balanced"></i>
             </button>
           </div>

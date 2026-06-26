@@ -79,13 +79,9 @@ function initObserver() {
   observeElements();
 
   const targets = document.querySelectorAll('.catalog-grid, .reviews-grid, .advantages-grid');
-  if (targets.length) {
-    targets.forEach(target => {
-      new MutationObserver(observeElements).observe(target, { childList: true, subtree: true });
-    });
-  } else {
-    new MutationObserver(observeElements).observe(document.body, { childList: true, subtree: true });
-  }
+  targets.forEach(target => {
+    new MutationObserver(observeElements).observe(target, { childList: true, subtree: true });
+  });
 }
 
 function initPhoneMask() {
@@ -224,14 +220,6 @@ function checkRateLimit(type, cooldownMs) {
   }
   localStorage.setItem(key, String(now));
   return true;
-}
-
-function debounce(fn, delay) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
-  };
 }
 
 function openCallbackModal() {

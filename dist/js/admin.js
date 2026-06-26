@@ -3,11 +3,10 @@ const CATEGORIES = {
   hallway: 'Прихожая', kids: 'Детская', budget: 'Бюджетная'
 };
 
-const CATEGORY_LABELS = {
-  living: 'Гостиная', bedroom: 'Спальня', kitchen: 'Кухня',
-  hallway: 'Прихожая', kids: 'Детская', budget: 'Бюджетная',
-  custom: 'Мебель под заказ', other: 'Другое'
-};
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 
 let products = [];
 let siteData = {};
