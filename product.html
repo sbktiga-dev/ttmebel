@@ -127,8 +127,31 @@
       <div id="productBadge"></div>
       <h1 class="product-title" id="productTitle"></h1>
       <div class="product-price" id="productPrice"></div>
+      <div id="productVariants" style="margin-bottom:16px;"></div>
       <p class="product-desc" id="productDesc"></p>
       <div class="product-meta" id="productMeta"></div>
+      <div class="installment-calc" id="installmentCalc">
+        <div class="installment-header" onclick="toggleInstallment()">
+          <span><i class="fa-solid fa-credit-card" style="color:var(--accent);margin-right:8px;"></i> Рассрочка от 0%</span>
+          <i class="fa-solid fa-chevron-down" id="installmentArrow"></i>
+        </div>
+        <div class="installment-body" id="installmentBody">
+          <div class="installment-row">
+            <label>Срок (мес.)</label>
+            <div class="installment-btns">
+              <button class="inst-btn active" data-months="3" onclick="setInstallmentMonths(3, this)">3</button>
+              <button class="inst-btn" data-months="6" onclick="setInstallmentMonths(6, this)">6</button>
+              <button class="inst-btn" data-months="12" onclick="setInstallmentMonths(12, this)">12</button>
+              <button class="inst-btn" data-months="24" onclick="setInstallmentMonths(24, this)">24</button>
+            </div>
+          </div>
+          <div class="installment-result">
+            <div class="inst-monthly" id="instMonthly">—</div>
+            <div class="inst-label">руб./мес.</div>
+          </div>
+          <div class="installment-note">Без переплат и скрытых комиссий</div>
+        </div>
+      </div>
       <div class="product-actions">
         <button class="btn btn-primary btn-glow" onclick="showProductOrderForm()">
           <i class="fa-solid fa-paper-plane"></i> Заказать расчёт
@@ -213,7 +236,7 @@
     </div>
     <div class="footer-col">
       <h4>Ссылки</h4>
-      <a href="admin.html">Управление каталогом</a>
+      <span style="color:var(--text-light);font-size:0.95rem;opacity:0.6;">ТТмебель © 2026</span>
       <a href="tel:+79991234567" class="footer-phone">+7 (999) 123-45-67</a>
       <a href="mailto:info@ttmebel.ru" class="footer-email">info@ttmebel.ru</a>
       <a href="#" class="footer-address">г. Краснодар, ул. Кореновская, 5, стр. 1</a>
@@ -324,11 +347,29 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('bcCategory').textContent = catLabel;
     document.getElementById('productCategory').textContent = catLabel;
     document.getElementById('productTitle').textContent = p.name;
+    const basePriceNum = parseInt((p.price || '').replace(/[^\d]/g, '')) || 0;
     document.getElementById('productPrice').innerHTML = p.price + ' <small>' + (p.priceUnit || '') + '</small>';
+    document.getElementById('productPrice').dataset.basePrice = basePriceNum;
     document.getElementById('productDesc').textContent = p.description || '';
 
     if (p.badge) {
       document.getElementById('productBadge').innerHTML = '<span class="product-badge">' + escapeHtml(p.badge) + '</span>';
+    }
+
+    if (p.variants && Object.keys(p.variants).length > 0) {
+      let variantsHtml = '<div class="pm-variants">';
+      Object.keys(p.variants).forEach(key => {
+        const v = p.variants[key];
+        variantsHtml += `<div class="pm-variant-group">`;
+        variantsHtml += `<label class="pm-variant-label">${escapeHtml(v.label)}</label>`;
+        variantsHtml += `<div class="pm-variant-options" data-variant-key="${key}">`;
+        v.options.forEach((opt, i) => {
+          variantsHtml += `<button type="button" class="pm-variant-btn ${i === 0 ? 'active' : ''}" data-price-add="${opt.priceAdd}" onclick="selectProductPageVariant(this)">${escapeHtml(opt.name)}</button>`;
+        });
+        variantsHtml += `</div></div>`;
+      });
+      variantsHtml += '</div>';
+      document.getElementById('productVariants').innerHTML = variantsHtml;
     }
 
     const allImgs = getAllImages(p);
@@ -479,6 +520,63 @@ function submitProductReview() {
   });
 
   showToast('Отзыв добавлен!');
+}
+
+function selectProductPageVariant(btn) {
+  const group = btn.closest('.pm-variant-options');
+  group.querySelectorAll('.pm-variant-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const priceEl = document.getElementById('productPrice');
+  if (!priceEl) return;
+  const basePrice = parseInt(priceEl.dataset.basePrice) || 0;
+
+  let totalAdd = 0;
+  document.querySelectorAll('.pm-variant-options').forEach(g => {
+    const activeBtn = g.querySelector('.pm-variant-btn.active');
+    if (activeBtn) {
+      totalAdd += parseInt(activeBtn.dataset.priceAdd) || 0;
+    }
+  });
+
+  const finalPrice = basePrice + totalAdd;
+  const formatted = finalPrice.toLocaleString('ru-RU');
+  priceEl.innerHTML = `от ${formatted} ₽ <small>/шт</small>`;
+
+  updateInstallmentCalc();
+}
+
+let installmentMonths = 3;
+
+function toggleInstallment() {
+  const body = document.getElementById('installmentBody');
+  const arrow = document.getElementById('installmentArrow');
+  body.classList.toggle('open');
+  arrow.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+function setInstallmentMonths(months, btn) {
+  installmentMonths = months;
+  document.querySelectorAll('.inst-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  updateInstallmentCalc();
+}
+
+function updateInstallmentCalc() {
+  const priceEl = document.getElementById('productPrice');
+  if (!priceEl) return;
+  const basePrice = parseInt(priceEl.dataset.basePrice) || 0;
+
+  let totalAdd = 0;
+  document.querySelectorAll('.pm-variant-options').forEach(g => {
+    const activeBtn = g.querySelector('.pm-variant-btn.active');
+    if (activeBtn) totalAdd += parseInt(activeBtn.dataset.priceAdd) || 0;
+  });
+
+  const finalPrice = basePrice + totalAdd;
+  const monthly = Math.ceil(finalPrice / installmentMonths);
+  const monthlyEl = document.getElementById('instMonthly');
+  if (monthlyEl) monthlyEl.textContent = monthly.toLocaleString('ru-RU');
 }
 </script>
 </body>

@@ -11,6 +11,14 @@
   <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
+<script>
+(function(){
+  var h = localStorage.getItem('ttmebel_admin_hash');
+  if (!h || h !== '4023b184a30ecc2462803d594228b8169bde21354c3305c54fae3b5cf57d3134') {
+    window.location.href = 'login.html';
+  }
+})();
+</script>
 
 <div class="admin-wrap">
   <a href="index.html" class="back-link">← На сайт</a>

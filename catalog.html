@@ -104,8 +104,9 @@
 
 <section class="section">
   <div class="catalog-toolbar">
-    <div class="catalog-search">
-      <input type="text" id="searchInput" placeholder="Поиск по названию...">
+    <div class="catalog-search" style="position:relative;">
+      <input type="text" id="searchInput" placeholder="Поиск по названию..." autocomplete="off">
+      <div class="search-autocomplete" id="searchAutocomplete"></div>
     </div>
     <div class="price-dropdown" id="priceDropdown">
       <button class="price-dropdown-btn" onclick="togglePriceDropdown()">
@@ -205,12 +206,13 @@
       <h4>Информация</h4>
       <a href="about.html">О компании</a>
       <a href="delivery.html">Доставка и оплата</a>
+      <a href="services.html">Замер и сборка</a>
       <a href="reviews.html">Отзывы</a>
       <a href="contacts.html">Контакты</a>
     </div>
     <div class="footer-col">
       <h4>Ссылки</h4>
-      <a href="admin.html">Управление каталогом</a>
+      <span style="color:var(--text-light);font-size:0.95rem;opacity:0.6;">ТТмебель © 2026</span>
       <a href="tel:+79991234567" class="footer-phone">+7 (999) 123-45-67</a>
       <a href="mailto:info@ttmebel.ru" class="footer-email">info@ttmebel.ru</a>
       <a href="#" class="footer-address">г. Краснодар, ул. Кореновская, 5, стр. 1</a>
@@ -446,14 +448,71 @@ function initFilters() {
 
 function initSearch() {
   const input = document.getElementById('searchInput');
+  const autocomplete = document.getElementById('searchAutocomplete');
   let timeout;
+
   input.addEventListener('input', (e) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       searchQuery = e.target.value.trim();
       renderFiltered();
+      showAutocomplete(searchQuery);
     }, 200);
   });
+
+  input.addEventListener('focus', () => {
+    if (input.value.trim().length >= 2) {
+      showAutocomplete(input.value.trim());
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.catalog-search')) {
+      hideAutocomplete();
+    }
+  });
+
+  if (autocomplete) {
+    autocomplete.addEventListener('click', (e) => {
+      const item = e.target.closest('.autocomplete-item');
+      if (item) {
+        input.value = item.dataset.name;
+        searchQuery = item.dataset.name;
+        renderFiltered();
+        hideAutocomplete();
+      }
+    });
+  }
+
+  function showAutocomplete(query) {
+    if (!autocomplete || !query || query.length < 2) {
+      hideAutocomplete();
+      return;
+    }
+    const q = query.toLowerCase();
+    const matches = allProducts
+      .filter(p => p.name.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)))
+      .slice(0, 5);
+    if (matches.length === 0) { hideAutocomplete(); return; }
+
+    autocomplete.innerHTML = matches.map(p => {
+      const catLabel = p.categoryLabel || CATALOG_CATEGORIES[p.category] || '';
+      const highlight = (text) => {
+        const idx = text.toLowerCase().indexOf(q);
+        if (idx === -1) return escapeHtml(text);
+        return escapeHtml(text.substring(0, idx)) + '<mark>' + escapeHtml(text.substring(idx, idx + query.length)) + '</mark>' + escapeHtml(text.substring(idx + query.length));
+      };
+      return '<div class="autocomplete-item" data-name="' + escapeHtml(p.name) + '">' +
+        '<span class="autocomplete-name">' + highlight(p.name) + '</span>' +
+        '<span class="autocomplete-meta">' + escapeHtml(catLabel) + ' · ' + escapeHtml(p.price) + '</span>' +
+      '</div>';
+    }).join('');
+    autocomplete.classList.add('show');
+  }
+
+  function hideAutocomplete() {
+    if (autocomplete) autocomplete.classList.remove('show');
+  }
 }
 
 function applyPriceFilter() {

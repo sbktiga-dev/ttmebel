@@ -57,7 +57,7 @@ ensureDir(path.join(DIST, 'images'));
 
 const cssFiles = ['style.css', 'admin.css'];
 const jsFiles = ['main.js', 'catalog.js', 'admin.js', 'notify.js', 'site-render.js', 'analytics.js', 'cart.js', 'chat.js', 'push.js'];
-const htmlFiles = ['index.html', 'catalog.html', 'about.html', 'delivery.html', 'reviews.html', 'contacts.html', 'admin.html', 'login.html', 'register.html', 'profile.html'];
+const htmlFiles = ['index.html', 'catalog.html', 'about.html', 'delivery.html', 'reviews.html', 'contacts.html', 'services.html', 'product.html', 'blog.html', 'admin.html', 'login.html', 'register.html', 'profile.html'];
 const dataFiles = ['products.json', 'site.json', 'config.json'];
 
 console.log('CSS:');

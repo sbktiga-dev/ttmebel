@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function checkAdminAuth() {
-  const isAdmin = localStorage.getItem('ttmebel_admin') === 'true';
-  if (!isAdmin) {
+  const hash = localStorage.getItem('ttmebel_admin_hash');
+  if (hash !== '4023b184a30ecc2462803d594228b8169bde21354c3305c54fae3b5cf57d3134') {
     window.location.href = 'login.html';
     return false;
   }
@@ -33,6 +33,7 @@ function checkAdminAuth() {
 }
 
 function logoutAdmin() {
+  localStorage.removeItem('ttmebel_admin_hash');
   localStorage.removeItem('ttmebel_admin');
   localStorage.removeItem('ttmebel_auth');
   window.location.href = 'index.html';
@@ -81,14 +82,21 @@ function loadProductsFromJSON() {
 
 function saveProducts() {
   try {
-    localStorage.setItem('ttmebel_products', JSON.stringify(products));
+    const json = JSON.stringify(products);
+    if (json.length > 4.5 * 1024 * 1024) {
+      alert('Данные товаров слишком большие (' + (json.length / 1024 / 1024).toFixed(1) + ' МБ). Уменьшите размер фото или удалите лишние товары.');
+      return false;
+    }
+    localStorage.setItem('ttmebel_products', json);
     showStorageUsage();
+    return true;
   } catch (e) {
     if (e.name === 'QuotaExceededError') {
       alert('Недостаточно места в хранилище браузера для товаров. Уменьшите размер фото или удалите лишние товары.');
     } else {
       alert('Ошибка сохранения товаров: ' + e.message);
     }
+    return false;
   }
 }
 

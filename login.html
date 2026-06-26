@@ -169,14 +169,23 @@
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const login = document.getElementById('login').value;
       const password = document.getElementById('password').value;
       const errorEl = document.getElementById('loginError');
-      
-      if (login === 'admin' && password === 'ttmebel2026') {
-        localStorage.setItem('ttmebel_auth', btoa(login + ':' + password));
+
+      const hash = await sha256(password);
+
+      if (login === 'admin' && hash === '4023b184a30ecc2462803d594228b8169bde21354c3305c54fae3b5cf57d3134') {
+        localStorage.setItem('ttmebel_admin_hash', hash);
         localStorage.setItem('ttmebel_admin', 'true');
         window.location.href = 'admin.html';
       } else {

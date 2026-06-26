@@ -276,7 +276,8 @@ function initPageTransitions() {
 }
 
 function initAdminVisibility() {
-  const isAdmin = localStorage.getItem('ttmebel_admin') === 'true';
+  const hash = localStorage.getItem('ttmebel_admin_hash');
+  const isAdmin = hash === '4023b184a30ecc2462803d594228b8169bde21354c3305c54fae3b5cf57d3134';
   const adminBtns = document.querySelectorAll('.btn-admin');
 
   adminBtns.forEach(btn => {
@@ -306,11 +307,58 @@ function initUserHeader() {
 
   if (user) {
     userBtn.href = 'profile.html';
-    userBtn.innerHTML = `<i class="fa-solid fa-user" style="margin-right:6px;"></i>${user.name.split(' ')[0]}`;
+    userBtn.innerHTML = '<i class="fa-solid fa-user" style="margin-right:6px;"></i>' + user.name.split(' ')[0];
     userBtn.className = 'header-user-btn header-user-btn-active';
   } else {
     userBtn.href = 'register.html';
-    userBtn.innerHTML = `<i class="fa-solid fa-user-plus" style="margin-right:6px;"></i>Войти`;
+    userBtn.innerHTML = '<i class="fa-solid fa-user-plus" style="margin-right:6px;"></i>Войти';
     userBtn.className = 'header-user-btn header-user-btn-inactive';
+  }
+
+  updateWishlistBadge();
+  updateComparisonBadge();
+}
+
+function updateWishlistBadge() {
+  const user = JSON.parse(localStorage.getItem('ttmebel_current_user'));
+  if (!user) return;
+  const favs = JSON.parse(localStorage.getItem('ttmebel_favorites_' + user.id) || '[]');
+  const userBtn = document.querySelector('.header-user-btn');
+  if (!userBtn) return;
+
+  let badge = userBtn.querySelector('.wishlist-badge');
+  if (favs.length > 0) {
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'wishlist-badge';
+      userBtn.appendChild(badge);
+    }
+    badge.textContent = favs.length;
+    badge.style.display = '';
+  } else if (badge) {
+    badge.style.display = 'none';
+  }
+}
+
+function updateComparisonBadge() {
+  const comp = JSON.parse(localStorage.getItem('ttmebel_comparison') || '[]');
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+
+  let badge = document.getElementById('comparisonNavBadge');
+  if (comp.length > 0) {
+    const catalogLink = nav.querySelector('a[href="catalog.html"]');
+    if (catalogLink && !badge) {
+      badge = document.createElement('span');
+      badge.id = 'comparisonNavBadge';
+      badge.className = 'comparison-nav-badge';
+      catalogLink.appendChild(badge);
+    }
+    if (badge) {
+      badge.textContent = comp.length;
+      badge.style.display = '';
+    }
+  } else if (badge) {
+    badge.style.display = 'none';
   }
 }

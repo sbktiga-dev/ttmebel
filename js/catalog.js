@@ -45,13 +45,24 @@ function renderCatalogCard(p) {
     ratingHtml = `<div class="catalog-rating">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5 - Math.round(avg))} <span class="catalog-rating-count">(${reviews.length})</span></div>`;
   }
 
+  let variantsHtml = '';
+  if (p.variants) {
+    const variantKeys = Object.keys(p.variants);
+    if (variantKeys.length > 0) {
+      const firstKey = variantKeys[0];
+      const v = p.variants[firstKey];
+      const optCount = v.options ? v.options.length : 0;
+      variantsHtml = `<div class="card-variant-hint"><span class="variant-dots">${'●'.repeat(Math.min(optCount, 5))}</span> ${escapeHtml(v.label)} (${optCount})</div>`;
+    }
+  }
+
   return `
     <div class="catalog-card" data-category="${p.category}" onclick="window.location.href='product.html?id=${p.id}'">
       <div class="catalog-card-image catalog-card-image-placeholder">
         ${imageContent}
         ${badgeHtml}
         ${imgCount}
-        <button class="quick-view-btn" onclick="event.stopPropagation(); window.location.href='product.html?id=${p.id}'" title="Подробнее">
+        <button class="quick-view-btn" onclick="event.stopPropagation(); openProductModal(${p.id})" title="Быстрый просмотр">
           <i class="fa-solid fa-eye"></i>
         </button>
       </div>
@@ -59,7 +70,8 @@ function renderCatalogCard(p) {
         <div class="category">${p.categoryLabel || CATALOG_CATEGORIES[p.category] || p.category}</div>
         <h3>${escapeHtml(p.name)}</h3>
         ${descHtml}
-        <div class="price">${p.price} <small>${p.priceUnit || ''}</small></div>
+        <div class="price" data-base-price="${escapeHtml(p.price)}">${p.price} <small>${p.priceUnit || ''}</small></div>
+        ${variantsHtml}
         ${ratingHtml}
       </div>
     </div>
@@ -110,6 +122,27 @@ function openProductModal(id) {
       ? `<div class="pm-counter" id="pmCounter">1 / ${allImgs.length}</div>`
       : '';
 
+    let variantsHtml = '';
+    if (p.variants) {
+      const variantKeys = Object.keys(p.variants);
+      if (variantKeys.length > 0) {
+        variantsHtml = '<div class="pm-variants">';
+        variantKeys.forEach(key => {
+          const v = p.variants[key];
+          variantsHtml += `<div class="pm-variant-group">`;
+          variantsHtml += `<label class="pm-variant-label">${escapeHtml(v.label)}</label>`;
+          variantsHtml += `<div class="pm-variant-options" data-variant-key="${key}">`;
+          v.options.forEach((opt, i) => {
+            variantsHtml += `<button type="button" class="pm-variant-btn ${i === 0 ? 'active' : ''}" data-price-add="${opt.priceAdd}" onclick="selectVariant(this, ${p.id})">${escapeHtml(opt.name)}</button>`;
+          });
+          variantsHtml += `</div></div>`;
+        });
+        variantsHtml += '</div>';
+      }
+    }
+
+    const basePriceNum = parseInt((p.price || '').replace(/[^\d]/g, '')) || 0;
+
     const modal = document.createElement('div');
     modal.className = 'product-modal-overlay';
     modal.id = 'productModal';
@@ -136,7 +169,8 @@ function openProductModal(id) {
             </button>
           </div>
           <h2 class="pm-title">${escapeHtml(p.name)}</h2>
-          <div class="pm-price">${p.price} <small>${p.priceUnit || ''}</small></div>
+          <div class="pm-price" id="pmPrice" data-base-price="${basePriceNum}">${p.price} <small>${p.priceUnit || ''}</small></div>
+          ${variantsHtml}
           <div class="pm-description">
             <h4>Описание</h4>
             <p>${escapeHtml(p.description) || 'Описание товара отсутствует.'}</p>
@@ -184,6 +218,34 @@ function closeProductModal() {
   document.body.style.overflow = '';
   setTimeout(() => modal.remove(), 300);
   document.removeEventListener('keydown', productModalKeyHandler);
+}
+
+function selectVariant(btn, productId) {
+  const group = btn.closest('.pm-variant-options');
+  group.querySelectorAll('.pm-variant-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const priceEl = document.getElementById('pmPrice');
+  if (!priceEl) return;
+  const basePrice = parseInt(priceEl.dataset.basePrice) || 0;
+
+  let totalAdd = 0;
+  document.querySelectorAll('.pm-variant-options').forEach(g => {
+    const activeBtn = g.querySelector('.pm-variant-btn.active');
+    if (activeBtn) {
+      totalAdd += parseInt(activeBtn.dataset.priceAdd) || 0;
+    }
+  });
+
+  const finalPrice = basePrice + totalAdd;
+  const formatted = finalPrice.toLocaleString('ru-RU');
+  priceEl.innerHTML = `от ${formatted} ₽ <small>/шт</small>`;
+
+  if (totalAdd !== 0) {
+    priceEl.classList.add('pm-price-changed');
+  } else {
+    priceEl.classList.remove('pm-price-changed');
+  }
 }
 
 function productModalKeyHandler(e) {

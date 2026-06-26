@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Услуги — Замер и сборка — ТТмебель</title>
+  <meta name="description" content="Заказ замера и сборки мебели ТТмебель в Краснодаре. Бесплатный замер, профессиональная сборка.">
+  <link rel="canonical" href="https://ttmebel.ru/services.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Услуги — Замер и сборка — ТТмебель">
+  <meta property="og:description" content="Закажите замер и сборку мебели. Бесплатный выезд мастера.">
+  <meta property="og:url" content="https://ttmebel.ru/services.html">
+  <meta property="og:image" content="https://ttmebel.ru/images/og-preview.jpg">
+  <meta property="og:locale" content="ru_RU">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=3.1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%238b6faf'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='%231a1a1a'%3EТТ%3C/text%3E%3C/svg%3E">
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    .services-page { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+    .service-card { background: rgba(37,37,37,0.6); backdrop-filter: blur(8px); border: 1px solid rgba(58,58,58,0.5); border-radius: 20px; padding: 32px; margin-bottom: 24px; }
+    .service-card h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+    .service-card h2 i { color: var(--accent); }
+    .service-card .service-desc { color: var(--text-light); margin-bottom: 20px; line-height: 1.7; }
+    .service-pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .price-option { background: rgba(37,37,37,0.4); border: 2px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .price-option:hover { border-color: var(--accent); }
+    .price-option.active { border-color: var(--accent); background: rgba(200,168,78,0.1); }
+    .price-option .po-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+    .price-option .po-price { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+    .price-option .po-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+    .service-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .service-form input, .service-form textarea, .service-form select { width: 100%; padding: 14px 16px; border: 2px solid rgba(58,58,58,0.5); border-radius: 10px; font-size: 1rem; font-family: inherit; background: rgba(58,58,58,0.5); color: var(--text); transition: border-color 0.2s; }
+    .service-form input:focus, .service-form textarea:focus, .service-form select:focus { outline: none; border-color: var(--accent); }
+    .service-form input::placeholder, .service-form textarea::placeholder { color: var(--text-muted); }
+    .service-form label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+    .service-form .form-group { margin-bottom: 16px; }
+    .service-success { display: none; text-align: center; padding: 40px; }
+    .service-success.show { display: block; }
+    .service-success .check { font-size: 4rem; margin-bottom: 16px; }
+    .service-features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
+    .sf-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--text-light); }
+    .sf-item i { color: var(--accent); }
+    @media (max-width: 768px) {
+      .service-pricing { grid-template-columns: 1fr; }
+      .service-form .form-row { grid-template-columns: 1fr; }
+      .service-features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-page="services">
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">ТТ</div>
+      <div class="logo-text">
+        <span class="logo-name">ТТмебель</span>
+        <span class="logo-sub">Мебель для дома</span>
+      </div>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="index.html">Главная</a>
+      <a href="catalog.html">Каталог</a>
+      <a href="about.html">О нас</a>
+      <a href="delivery.html">Доставка</a>
+      <a href="reviews.html">Отзывы</a>
+      <a href="contacts.html">Контакты</a>
+    </nav>
+    <div class="header-right">
+      <a href="tel:+79991234567" class="header-phone">+7 (999) 123-45-67</a>
+      <a href="admin.html" class="btn-admin">Админ</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="index.html"><span itemprop="name">Главная</span></a>
+      <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span itemprop="name" class="current">Услуги</span>
+      <meta itemprop="position" content="2">
+    </li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <h1>Замер и сборка</h1>
+  <p>Закажите бесплатный замер или профессиональную сборку мебели</p>
+</div>
+
+<div class="services-page">
+  <div class="service-card">
+    <h2><i class="fa-solid fa-ruler-combined"></i> Вызов замерщика</h2>
+    <p class="service-desc">Наш мастер приедет к вам, замерит пространство и поможет подобрать идеальное решение. Замер бесплатный при заказе мебели.</p>
+    <div class="service-pricing">
+      <div class="price-option active" data-service="free-measure" onclick="selectService(this, 'measure')">
+        <div class="po-name">Бесплатный</div>
+        <div class="po-price">0 ₽</div>
+        <div class="po-note">При заказе мебели</div>
+      </div>
+      <div class="price-option" data-service="paid-measure" onclick="selectService(this, 'measure')">
+        <div class="po-name">Без заказа</div>
+        <div class="po-price">1 500 ₽</div>
+        <div class="po-note">Зачёт при покупке</div>
+      </div>
+      <div class="price-option" data-service="design-measure" onclick="selectService(this, 'measure')">
+        <div class="po-name">С дизайн-проектом</div>
+        <div class="po-price">3 500 ₽</div>
+        <div class="po-note">3D-визуализация</div>
+      </div>
+    </div>
+    <div class="service-features">
+      <div class="sf-item"><i class="fa-solid fa-check"></i> Выезд в удобное время</div>
+      <div class="sf-item"><i class="fa-solid fa-check"></i> Точные замеры с учётом коммуникаций</div>
+      <div class="sf-item"><i class="fa-solid fa-check"></i> Рекомендации по материалам</div>
+      <div class="sf-item"><i class="fa-solid fa-check"></i> Фотофиксация пространства</div>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <h2><i class="fa-solid fa-screwdriver-wrench"></i> Сборка мебели</h2>
+    <p class="service-desc">Профессиональная сборка и установка мебели нашими мастерами. Гарантия на работы 1 год.</p>
+    <div class="service-pricing">
+      <div class="price-option active" data-service="simple-assembly" onclick="selectService(this, 'assembly')">
+        <div class="po-name">Простая</div>
+        <div class="po-price">от 1 500 ₽</div>
+        <div class="po-note">Столы, стулья, полки</div>
+      </div>
+      <div class="price-option" data-service="complex-assembly" onclick="selectService(this, 'assembly')">
+        <div class="po-name">Сложная</div>
+        <div class="po-price">от 3 500 ₽</div>
+        <div class="po-note">Шкафы, кухни, гарнитуры</div>
+      </div>
+      <div class="price-option" data-service="premium-assembly" onclick="selectService(this, 'assembly')">
+        <div class="po-name">Премиум</div>
+        <div class="po-price">от 5 000 ₽</div>
+        <div class="po-note">Встроенная мебель</div>
+      </div>
+    </div>
+    <div class="service-features">
+      <div class="sf-item"><i class="fa-solid fa-check"></i> Сборка за 1-3 часа</div>
+      <div class="sf-item"><i class="fa-solid fa-check"></i> Вынос упаковки</div>
+      <div class="sf-item"><i class="fa-solid fa-check"></i> Гарантия 1 год</div>
+      <div class="sf-item"><i class="fa-solid fa-check"></i> Оплата после проверки</div>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <h2><i class="fa-solid fa-calendar-check"></i> Заказать услугу</h2>
+    <div class="service-form" id="serviceForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ваше имя</label>
+          <input type="text" id="svcName" placeholder="Иван" required>
+        </div>
+        <div class="form-group">
+          <label>Телефон</label>
+          <input type="tel" id="svcPhone" placeholder="+7 (___) ___-__-__" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Адрес</label>
+        <input type="text" id="svcAddress" placeholder="г. Краснодар, ул. ..." required>
+      </div>
+      <div class="form-group">
+        <label>Дата и время</label>
+        <input type="datetime-local" id="svcDate" required>
+      </div>
+      <div class="form-group">
+        <label>Комментарий</label>
+        <textarea id="svcComment" rows="3" placeholder="Опишите что нужно (опционально)"></textarea>
+      </div>
+      <button class="btn btn-primary btn-glow" onclick="submitService()" style="width:100%;padding:16px;font-size:1.05rem;">
+        <i class="fa-solid fa-paper-plane"></i> Заказать услугу
+      </button>
+    </div>
+    <div class="service-success" id="serviceSuccess">
+      <div class="check">✅</div>
+      <h3 style="font-size:1.3rem;margin-bottom:8px;">Заявка отправлена!</h3>
+      <p style="color:var(--text-light);">Мы свяжемся с вами в течение 15 минут для подтверждения</p>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-mark">ТТ</div>
+        <div class="logo-text">
+          <span class="logo-name">ТТмебель</span>
+          <span class="logo-sub">Мебель для дома</span>
+        </div>
+      </div>
+      <p>Качественная мебель для дома с доставкой и установкой. Работаем для вашего комфорта с 2018 года.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Каталог</h4>
+      <a href="catalog.html#living">Гостиная</a>
+      <a href="catalog.html#bedroom">Спальня</a>
+      <a href="catalog.html#kitchen">Кухня</a>
+      <a href="catalog.html#hallway">Прихожая</a>
+      <a href="catalog.html#kids">Детская</a>
+    </div>
+    <div class="footer-col">
+      <h4>Информация</h4>
+      <a href="about.html">О компании</a>
+      <a href="delivery.html">Доставка и оплата</a>
+      <a href="reviews.html">Отзывы</a>
+      <a href="contacts.html">Контакты</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ссылки</h4>
+      <span style="color:var(--text-light);font-size:0.95rem;opacity:0.6;">ТТмебель © 2026</span>
+      <a href="tel:+79991234567" class="footer-phone">+7 (999) 123-45-67</a>
+      <a href="mailto:info@ttmebel.ru" class="footer-email">info@ttmebel.ru</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 ТТмебель. Все права защищены.</p>
+  </div>
+</footer>
+
+<button class="scroll-top" aria-label="Наверх">↑</button>
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="index.html"><i class="fa-solid fa-house"></i><span>Главная</span></a>
+    <a href="catalog.html"><i class="fa-solid fa-table-cells-large"></i><span>Каталог</span></a>
+    <a href="contacts.html"><i class="fa-solid fa-phone"></i><span>Связь</span></a>
+    <a href="about.html"><i class="fa-solid fa-circle-info"></i><span>О нас</span></a>
+  </div>
+</nav>
+<div class="messengers-float">
+  <a href="https://wa.me/79991234567" class="messenger-btn whatsapp" data-tooltip="WhatsApp" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+  <a href="https://vk.me/max" class="messenger-btn max" data-tooltip="Макс" target="_blank" rel="noopener"><i class="fa-brands fa-vk"></i></a>
+</div>
+
+<script src="js/notify.js"></script>
+<script src="js/main.js"></script>
+<script>
+let selectedServices = { measure: 'free-measure', assembly: 'simple-assembly' };
+
+function selectService(el, type) {
+  el.closest('.service-pricing').querySelectorAll('.price-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+  selectedServices[type] = el.dataset.service;
+}
+
+function submitService() {
+  if (!checkRateLimit('service_order', 60000)) return;
+
+  const name = document.getElementById('svcName').value.trim();
+  const phone = document.getElementById('svcPhone').value.trim();
+  const address = document.getElementById('svcAddress').value.trim();
+  const date = document.getElementById('svcDate').value;
+  const comment = document.getElementById('svcComment').value.trim();
+
+  if (!name || !phone || !address || !date) {
+    showToast('Заполните обязательные поля');
+    return;
+  }
+
+  const serviceNames = {
+    'free-measure': 'Бесплатный замер',
+    'paid-measure': 'Замер без заказа (1 500 ₽)',
+    'design-measure': 'Замер с дизайн-проектом (3 500 ₽)',
+    'simple-assembly': 'Простая сборка (от 1 500 ₽)',
+    'complex-assembly': 'Сложная сборка (от 3 500 ₽)',
+    'premium-assembly': 'Премиум сборка (от 5 000 ₽)'
+  };
+
+  const measureType = serviceNames[selectedServices.measure] || selectedServices.measure;
+  const assemblyType = serviceNames[selectedServices.assembly] || selectedServices.assembly;
+
+  const message = '🔧 Заказ услуги\n\n' +
+    '👤 ' + name + '\n' +
+    '📞 ' + phone + '\n' +
+    '📍 ' + address + '\n' +
+    '📅 ' + new Date(date).toLocaleString('ru-RU') + '\n\n' +
+    '📐 Замер: ' + measureType + '\n' +
+    '🔨 Сборка: ' + assemblyType + '\n' +
+    (comment ? '\n💬 ' + comment : '');
+
+  submitForm('service', { name, phone, address, date, comment, measure: selectedServices.measure, assembly: selectedServices.assembly, message })
+    .then(() => {
+      document.getElementById('serviceForm').style.display = 'none';
+      document.getElementById('serviceSuccess').classList.add('show');
+      showToast('Заявка отправлена! Мы свяжемся с вами.');
+    })
+    .catch(() => {
+      document.getElementById('serviceForm').style.display = 'none';
+      document.getElementById('serviceSuccess').classList.add('show');
+      showToast('Заявка принята!');
+    });
+}
+</script>
+</body>
+</html>
